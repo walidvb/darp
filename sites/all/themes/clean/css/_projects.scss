@@ -57,8 +57,6 @@ body.page-projects{
 /* WORKS LIST */
 
 .page-projects #header{
-	width: 98%;
-	height: 100%;
 	top: 65px;
 	position: fixed;
 	z-index: 100;
@@ -80,9 +78,6 @@ body.page-projects{
 		height: 40px;
 		width: 100%;
 	}
-}
-.page-projects.list-closed #header{
-	top: -100%;
 }
 
 	/* work row */
@@ -180,7 +175,7 @@ body.page-projects{
 div.img-loading{
 	background-image: url("../img/loading.gif");
 	background-repeat: no-repeat;
-	background-size: auto, cover;
+	background-size: auto, contain;
 	background-position: center, center;
 }
 
@@ -201,7 +196,7 @@ div.img-loading{
 	left: -0.25%;
 	background-position: center;
 	background-repeat: no-repeat;
-	background-size: cover;
+	background-size: auto, contain;
 	img{
 		cursor: zoom-out;
 		cursor: -webkit-zoom-out;
@@ -209,64 +204,25 @@ div.img-loading{
 }
 .img-final{
 	-webkit-transition: left 0.5s;
+	background-size: contain;
 }
 .closed .proj-wrapper .zoom-placeholder, .closed .proj-wrapper .img-final{
 	left: 0%;
 }
-
-
-.team-footer{
-	color: $brand!important;
-	text-transform: uppercase;
-	visibility: hidden;
-	.alice-epfl &{
-		visibility: visible;
-	}
-}
 /* /IMAGES */
 
 /* PROJECT INFO */
-
-#info-trigger{
-	top: 65px;
-	color: white;
-	left: 48%;
-	width: 20px;
-	height: 20px;
-	display: inline-block;
-	transition: all 0.5s ease-out 0s;
-	-webkit-transition: all 0.5s ease-out 0s;
-	-moz-transition: all 0.5s ease-out 0s;
-	-o-transition: all 0.5s ease-out 0s;
-	transform: rotateZ(0deg);
-	-webkit-transform: rotateZ(0deg);
-	-o-transform: rotateZ(0deg);
-	background-image: url('../img/cross.png');
-	background-size: contain;
-}
-
-#info-trigger.closed, .clean #info-trigger{
-	left: 0.5%;
-	transform: rotateZ(45deg);
-	-webkit-transform: rotateZ(45deg);
-	-moz-transform: rotateZ(45deg);
-	-o-transform: rotateZ(45deg);
-}
 $margin: 10px;
 .proj-info{
-	width: 32.5%;
-	left:15.5%;
 	position: absolute;
 	z-index: 900;
 	top: 0;
 	bottom: 0;
+	left: 0;
+	right: 0;
 	background-color: rgba(255,255,255,0.8);
 	padding: 40px 10px 0px 10px;
 	margin: 0px 5px;
-	transition: all 0.5s ease-out;
-	-webkit-transition: all 0.5s ease-out 0s, background-color 0.2s ease-out ;
-	-moz-transition: all 0.5s ease-out 0s, background-color 0.2s ease-out ;
-	-o-transition: all 0.5s ease-out 0s, background-color 0.2s ease-out ;
 	a{
 		color: $brand;
 		&:hover{

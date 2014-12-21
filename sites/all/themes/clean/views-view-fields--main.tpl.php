@@ -48,11 +48,9 @@
 		$value = strtolower(str_replace(' ', '-', $value));
 		$data .= " data-$key=\"$value\"";
 	}
-?>	
-<div class="views-row miniframe" <?php print $data ?>>
+?>
 
-	
-	
+<div class="views-row miniframe" <?php print $data ?>>
 	<div class="proj-wrapper"  data-id="<?php print $nid ?>">
 		<div class="proj-info slide">
 			<div class="proj-header">

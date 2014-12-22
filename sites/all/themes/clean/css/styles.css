@@ -338,125 +338,20 @@ body.page-projects {
   top: -10px;
 }
 
-.list-closed .view-id-main {
-  top: 0%;
-  transition: top 1s;
-  -webkit-transition: top 1s;
-  -moz-transition: top 1s;
-  -o-transition: top 1s;
-}
-
 .view-id-main {
   position: relative;
-  top: 100%;
-  transition: top 1s;
-  -webkit-transition: top 1s;
-  -moz-transition: top 1s;
-  -o-transition: top 1s;
 }
 
 /* /CLEAN */
 /* WORKS LIST */
 .page-projects #header {
-  top: 65px;
+  transform: translateY(-50%);
+  top: 50%;
+  right: 5px;
   position: fixed;
-  z-index: 100;
-  transition: all 1s;
-  -webkit-transition: all 1s;
-  -moz-transition: all 1s;
-  -o-transition: all 1s;
-  background: none repeat scroll 0 0 #FFFFFF;
-  top: 0%;
-  padding: 0% 1%;
   z-index: 149;
-  font-size: inherit;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-}
-.page-projects #header:before {
-  background: none repeat scroll 0 0 #FFFFFF;
-  content: "";
-  display: block;
-  height: 40px;
-  width: 100%;
-}
-
-/* work row */
-.work-table {
-  font-size: 16px;
-  /*headers*/
-}
-.work-table thead {
-  background-color: white;
-  border: none;
-}
-.work-table .sort {
-  text-align: left;
-  padding-left: 0px;
-  padding-bottom: 0px;
-}
-.work-table tbody tr {
-  color: black;
-  border-top: solid 1px black;
-  border-bottom: none;
-  cursor: pointer;
-  background-color: inherit;
-}
-body:not(.mobile) .work-table tbody tr:hover, .work-table tbody tr.active-proj {
-  color: #00FF00;
-  border-top-color: #00FF00;
-}
-.work-table .work-list-item h2, .work-table .work-list-item a {
-  color: inherit;
-  text-decoration: none;
-  font-size: inherit;
-  font-weight: inherit;
-}
-.work-table .sort {
-  cursor: pointer;
-}
-.work-table .sort div {
-  display: inline-block;
-  text-indent: -10000px;
-  width: 10px;
-  height: 10px;
-  background-color: black;
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -o-border-radius: 50%;
-}
-.work-table .sort.active div {
-  background-color: lime;
-}
-body:not(.mobile) .work-table .sort:hover div {
-  background-color: #00FF00;
-}
-.work-table td {
-  padding-left: 0px;
-  padding-bottom: 0px;
-}
-
-/* /work row */
-/* /WORKS LIST */
-.work-list-item {
-  padding-left: 0px;
-}
-
-.views-field-title {
-  width: 32%;
-  min-width: 166px;
-}
-
-.views-field-field-team, .views-field-field-scale, .views-field-field-city {
-  width: 16%;
-  min-width: 83px;
-}
-
-.views-field-field-topology {
-  margin-right: 1%;
-  width: 16.7%;
-  min-width: 83px;
 }
 
 /*  IMAGES  */

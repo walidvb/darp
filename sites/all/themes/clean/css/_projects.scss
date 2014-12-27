@@ -46,11 +46,22 @@ body.page-projects{
  #header{
  		transform: translateY(-50%);
 		top: 50%;
-		right: 5px;
+		right: 35px;
 		position: fixed;
 		z-index: 149;
 		overflow: auto;
 		-webkit-overflow-scrolling: touch;
+		.pager{
+			cursor: pointer;
+			margin-bottom: 15px;
+			h2{
+				font-size: 12px;
+			}
+			h2, img{
+				display: inline;
+				vertical-align: middle;
+			}
+		}
 	}
 }
 

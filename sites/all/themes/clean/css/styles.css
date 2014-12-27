@@ -347,11 +347,22 @@ body.page-projects {
 .page-projects #header {
   transform: translateY(-50%);
   top: 50%;
-  right: 5px;
+  right: 35px;
   position: fixed;
   z-index: 149;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+}
+.page-projects #header .pager {
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+.page-projects #header .pager h2 {
+  font-size: 12px;
+}
+.page-projects #header .pager h2, .page-projects #header .pager img {
+  display: inline;
+  vertical-align: middle;
 }
 
 /*  IMAGES  */

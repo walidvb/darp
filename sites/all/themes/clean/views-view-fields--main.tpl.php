@@ -22,51 +22,52 @@
  *
  * @ingroup views_templates
  */
- $id = $fields['title']->content;
- $nid = $fields['nid']->content;
- $edit = $fields['edit_node']->content;
- $body = $fields['body']->content;
- $short = $fields['field_short_description']->content;
- $first_img = $fields['field_images_1']->content;
- $images = $fields['field_images']->content;
- $sortable = array();
- $sortable['title'] = $id;
- $sortable['topology'] = $fields['field_topology']->content;
- $sortable['city'] = $fields['field_city']->content;
- $sortable['team'] = $fields['field_team']->content;
- $sortable['status'] = $fields['field_status']->content;
+$title = $fields['title']->content;
+$nid = $fields['nid']->content;
+$edit = $fields['edit_node']->content;
+$body = $fields['body']->content;
+$short = $fields['field_short_description']->content;
+$thumbnail = $fields['field_thumbnail']->content;
+$first_img = $fields['field_images_1']->content;
+
+$images = $fields['field_images']->content;
+$sortable = array();
+$sortable['title'] = $title;
+$sortable['topology'] = $fields['field_topology']->content;
+$sortable['city'] = $fields['field_city']->content;
+$sortable['team'] = $fields['field_team']->content;
+$sortable['status'] = $fields['field_status']->content;
 
  /*	$scales = array('s', 'm', 'l', 'xl', 'xxl');
  	$sortable['scale'] = str_replace(array('S', 'M', 'XL', 'L'), array(1, 2, 4, 3), $fields['field_scale']->content);
  */
- $sortable['year'] = substr($fields['field_year']->content,0,4);
- $sortable['nid'] = $nid;
- $sortable['cycle-hash'] = render_($id);
- $data = '';
-	foreach($sortable as $key => $value)
-	{
-		$value = strtolower(str_replace(' ', '-', $value));
-		$data .= " data-$key=\"$value\"";
-	}
-?>
+ 	$sortable['year'] = substr($fields['field_year']->content,0,4);
+ 	$sortable['nid'] = $nid;
+ 	$sortable['cycle-hash'] = render_($title);
+ 	$data = '';
+ 	foreach($sortable as $key => $value)
+ 	{
+ 		$value = strtolower(str_replace(' ', '-', $value));
+ 		$data .= " data-$key=\"$value\"";
+ 	}
+ 	?>
 
 <div class="views-row miniframe" <?php print $data ?>>
 	<div class="proj-wrapper"  data-id="<?php print $nid ?>">
 		<div class="proj-info slide">
-			<div class="proj-header">
-				<div class="proj-title"><?php print $id . ' ' . $edit  ?></div>
-				<div class="proj-details">
-					<?php print($sortable['city'] . ", " . $sortable['year'] . ": " . $sortable['status']) ?>
-				</div>
+			<div class="proj-title">
+				<?php print $title ?>
 			</div>
-			<div class="proj-body">
 			<div class="proj-short">
 				<?php print($short) ?>
 			</div>
-			<?php print($body); ?>
+			<div class="proj-thumbnail">
+				<?php print $thumbnail ?>
 			</div>
 		</div>
+		<div class="proj-description slide">
+			<?php print $body ?>
+		</div>
 		<?php print $first_img . $images ?>
-	</div>
-	
+	</div>	
 </div>

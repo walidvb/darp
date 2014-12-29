@@ -241,7 +241,6 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
       fx: 'scrollHorz',
       slides: '> .slide',
       autoHeight: false,
-      allowWrap: false,
     }
 
     $('.proj-wrapper').each(function() {
@@ -252,9 +251,9 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
       fx: 'scrollVert',
       slides: '.miniframe',
       autoHeight: false,
-      reverse: true,
       swipe: false,
-
+      reverse: true,
+      allowWrap: false
     }
     
     superframe = $('.superframe .view-content').cycle(superopts);

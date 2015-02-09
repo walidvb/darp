@@ -58,9 +58,9 @@ $sortable['status'] = $fields['field_status']->content;
  			<?php if($type || $short || $thumbnail): ?>
  				<div class="proj-info text-slide slide">
  					<div class="text-slide-content">
- 						<h1 class="proj-title">
+ 						<h2 class="proj-title">
  							<?php print $title ?>
- 						</h1>
+ 						</h2>
  						<div class="proj-type">
  							<?php print $type ?>
  						</div>

@@ -46,7 +46,7 @@
 	}
 }
 
-html, body, .view-main, .view-main .view-content, .view-main .views-row, .proj-wrapper, .proj-wrapper > div{
+html, body, .view-main, .view-main .view-content, .view-main .views-row, .proj-wrapper, .slide{
 	height:100%;
 	width:100%;
 }
@@ -120,6 +120,15 @@ body.page-projects{
 	-webkit-transition: all 0.5s ease-out 0s;
 	-moz-transition: all 0.5s ease-out 0s;
 	-o-transition: all 0.5s ease-out 0s;
+}
+
+$padding: 15px;
+.img-container, .proj-info, .proj-description{
+	padding: $padding;
+	height: calc(100% - #{2 * $padding});
+	width: calc(100% - #{2 * $padding});
+	box-sizing: border-box;
+	margin: auto;
 }
 div.img-loading{
 	background-image: url("../img/loading.gif");

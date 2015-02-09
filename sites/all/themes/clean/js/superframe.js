@@ -58,7 +58,6 @@ jQuery.fn.replaceFirst = function()
 
   Drupal.behaviors.superframe = {
     attach: function (context, settings) {
-      var teamClass = "alice";
 //disable cycle logging
 $.fn.cycle.log = $.noop;
 //move superframe to top level
@@ -110,17 +109,10 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
     //activate project in list
     currMiniframe = 0;
     $('.active-proj').removeClass('active-proj');
-
-    teamClass = outgoingSlideEl.attributes["data-team"].value;
-    var oldTeamClass = incoming.attributes["data-team"].value;
-    if(teamClass != oldTeamClass)
-    {
-      $('body').removeClass(teamClass);
-    }
     var nid = $(incoming).data('nid');
     $('.work-list-item[data-nid=' + nid + ']').addClass('active-proj');
     var c = currFrame;
-    setTimeout(function(){c.cycle(0); c.parents('.miniframe').add('#info-trigger').removeClass('closed');}, 500);
+    //setTimeout(function(){c.cycle(0); c.parents('.miniframe').add('#info-trigger').removeClass('closed');}, 500);
   //update current project
   currFrame = $('.proj-wrapper', incoming);
   $('#info-trigger').removeClass('closed')
@@ -152,6 +144,7 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
     if(optionHash.currSlide == 0 && optionHash.nextSlide == 1)
     {
       $(incoming).parents('.proj-wrapper').replaceFirst();
+
     }
     else
     {
@@ -162,6 +155,19 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
         $(incoming).prev().replace();
       }, 500);
     }
+
+    //fade arrows
+    if(optionHash.currSlide == 0){
+      $('body').addClass('nothing-left');
+    }
+    else if(optionHash.currSlide == optionHash.slidesCount)
+    {
+      $('body').addClass('nothing-right');
+    }
+    else{
+      $('body').removeClass('nothing-left');
+      $('body').removeClass('nothing-right');
+    }
   }
   //Clean up always
   $('body').removeClass('clean');
@@ -170,11 +176,6 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
 
 $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, incoming, forwardFlag)   {
       //if this is superframe
-      if(event.target.className == "view-content")
-      { 
-        teamClass = incoming.attributes["data-team"].value
-        $('body').removeClass('in-transit').addClass(teamClass);
-      }
     });
 
     //initialize cycle
@@ -183,16 +184,7 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
 
       if(event.target.className == "view-content")
       {
-         //if hash was present remove list
-         setTimeout(function(){
-          if(optionHash._hashFence && initialPageLoad)
-          {
-            $('body').addClass('list-closed');
-          }
-         }, 800);
          initialPageLoad = false;
-         teamClass = optionHash.slides[optionHash.currSlide].attributes['data-team'].value;
-         $('body').addClass(teamClass);
          var initialSlide = optionHash.currSlide;
          $('.work-list-item').eq(initialSlide).addClass('active-proj');
 
@@ -304,7 +296,7 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
 
     //bind mousewheel
     superframe.on('mousewheel', wheelMove);
-    $('.proj-info').on('mousewheel', function(e){e.stopPropagation();})
+    $('.proj-info, .proj-description').on('mousewheel', function(e){e.stopPropagation();})
     function wheelMove(e, deltaY) {
       //superframe.unbind('mousewheel', wheelMove);
       var threshold = 0;

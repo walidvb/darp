@@ -306,6 +306,49 @@ body.html {
     margin-bottom: 0px;
   }
 }
+#contact .proj-desc, #intro .proj-desc {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  min-width: 450px;
+  max-width: 450px;
+  min-height: 250px;
+  margin: auto;
+  background: url("../img/darp_background.png");
+  background-position: center;
+  background-size: cover;
+  display: table;
+  padding: 15px;
+}
+#contact .proj-desc .proj-desc-body, #intro .proj-desc .proj-desc-body {
+  display: table-cell;
+}
+#contact .proj-desc .proj-desc-body p, #intro .proj-desc .proj-desc-body p {
+  margin-bottom: 0;
+}
+#contact .proj-desc .proj-desc-body a, #intro .proj-desc .proj-desc-body a {
+  color: black;
+}
+#contact .proj-desc .proj-desc-body a:hover, #intro .proj-desc .proj-desc-body a:hover {
+  text-transform: underline;
+}
+
+#intro h1 {
+  font-weight: normal;
+  margin-bottom: 0;
+}
+#intro .proj-desc-body {
+  vertical-align: middle;
+}
+
+#contact .proj-desc-body {
+  text-align: left;
+  display: table-cell;
+  vertical-align: bottom;
+}
+
 html, body, .view-main, .view-main .view-content, .view-main .views-row, .proj-wrapper, .proj-wrapper > div {
   height: 100%;
   width: 100%;

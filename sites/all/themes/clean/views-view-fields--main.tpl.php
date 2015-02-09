@@ -44,17 +44,17 @@ $sortable['status'] = $fields['field_status']->content;
  */
  	$sortable['year'] = substr($fields['field_year']->content,0,4);
  	$sortable['nid'] = $nid;
- 	$sortable['cycle-hash'] = render_($title);
+ 	$sortable['cycle-hash'] = render_($nid);
  	$data = '';
  	foreach($sortable as $key => $value)
  	{
- 		$value = strtolower(str_replace(' ', '-', $value));
+ 		$value = render_($value);
  		$data .= " data-$key=\"$value\"";
  	}
  	?>
 
- 	<div id="<?php print strtolower(str_replace(' ', '-', $title)) ?>" class="views-row miniframe" <?php print $data ?>>
- 		<div class="proj-wrapper"  data-id="<?php print $nid ?>">
+ 	<div class="views-row miniframe" <?php print $data ?>>
+ 		<div class="proj-wrapper"  data-id="<?php print $nid ?>" id="<?php print render_($title) ?>" >
  			<?php if($type || $short || $thumbnail): ?>
  				<div class="proj-info text-slide slide">
  					<div class="text-slide-content">
@@ -74,10 +74,10 @@ $sortable['status'] = $fields['field_status']->content;
  				</div>
  			<?php endif; ?>
  			<?php if($body): ?>
- 				<div class="proj-description teaxt-slide slide">
+ 				<div class="proj-description text-slide slide">
  					<div class="text-slide-content"><?php print $body ?></div>
  				</div>
  			<?php endif; ?>
- 			<?php print $first_img . $images ?>
+ 			<?php print $images ?>
  		</div>	
  	</div>

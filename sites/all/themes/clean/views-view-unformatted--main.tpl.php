@@ -6,10 +6,20 @@
  * @ingroup views_templates
  */
 ?>
-<?php if (!empty($title)): ?>
-  <h3><?php print $title; ?></h3>
-<?php endif; ?>
+<div class="views-row miniframe" id="intro">
+	<div class="proj-wrapper">
+			<div class="proj-description text-slide slide">
+				<div class="text-slide-content">
+					<div class="proj-desc">
+						<div class="proj-desc-body">
+							<h1>DARP</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>	
+</div>
 
 <?php foreach ($rows as $id => $row): ?>
-    <?php print $row; ?>
+	<?php print $row; ?>
 <?php endforeach; ?>

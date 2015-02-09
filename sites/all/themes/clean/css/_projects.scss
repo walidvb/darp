@@ -1,3 +1,51 @@
+#contact, #intro{
+	.proj-desc{
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 50%;
+		-webkit-transform: translateY(-50%);
+		min-width: 450px;
+		max-width: 450px;
+		min-height: 250px;
+		margin: auto;
+		background: url("../img/darp_background.png");
+		background-position: center;
+		background-size: cover;
+		display: table;
+		padding: 15px;
+		.proj-desc-body{
+			display: table-cell;
+			p{
+				margin-bottom: 0;
+			}
+			a{
+				color: black;
+				&:hover{
+					text-transform: underline;
+				}
+			}
+		}
+	}
+}
+
+#intro{
+	h1{
+		font-weight: normal;
+		margin-bottom: 0;
+	}
+	.proj-desc-body{
+		vertical-align: middle;
+	}
+}
+#contact{
+	.proj-desc-body{
+		text-align: left;
+			display: table-cell;
+			vertical-align: bottom;
+	}
+}
+
 html, body, .view-main, .view-main .view-content, .view-main .views-row, .proj-wrapper, .proj-wrapper > div{
 	height:100%;
 	width:100%;

@@ -415,28 +415,40 @@ div.img-loading {
 
 /* /IMAGES */
 /* PROJECT INFO */
-.proj-info {
+.text-slide {
+  padding: 40px 10px;
+}
+
+.text-slide-content {
   position: absolute;
-  z-index: 900;
+  right: 0;
+  left: 0;
   top: 0;
   bottom: 0;
-  left: 0;
-  right: 0;
+  z-index: 900;
+  text-align: center;
+  max-height: 100%;
+  max-width: 70%;
+  overflow: auto;
   background-color: rgba(255, 255, 255, 0.8);
-  padding: 40px 10px 0px 10px;
-  margin: 0px 5px;
+  margin: 0px auto;
 }
-.proj-info a {
+.text-slide-content a {
   color: lime;
 }
-.proj-info a:hover {
+.text-slide-content a:hover {
   text-decoration: underline;
 }
-.proj-info p {
+.text-slide-content p {
   margin-bottom: 15px;
 }
-.closed .proj-info, .clean .proj-info {
-  left: -34%;
+
+#daarp .proj-desc {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
 }
 
 .proj-header {

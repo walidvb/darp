@@ -53,3 +53,12 @@ function clean_form_taxonomy_form_term_alter(&$form, &$form_state) {
   $form['description']['#access'] = FALSE;
 }
 
+function clean_views_pre_render(&$view){
+	foreach($view->result as $row)
+	{
+		if($row->nid == 119)
+		{
+			shuffle($row->field_field_images);
+		}
+	}
+}

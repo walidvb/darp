@@ -23,7 +23,7 @@
  * @ingroup views_templates
  */
 $title = $fields['title']->content;
-$name = $fields['field_name']->content;
+$project_name = $fields['field_project_name']->content;
 $nid = $fields['nid']->content;
 $edit = $fields['edit_node']->content;
 $body = $fields['body']->content;
@@ -60,7 +60,7 @@ $sortable['status'] = $fields['field_status']->content;
  				<div class="proj-info text-slide slide">
  					<div class="text-slide-content">
  						<h2 class="proj-title">
- 							<?php print $name ?>
+ 							<?php print $project_name ?>
  						</h2>
  						<div class="proj-type">
  							<?php print $type ?>

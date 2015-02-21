@@ -110,7 +110,7 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
     currMiniframe = 0;
     $('.active-proj').removeClass('active-proj');
     var nid = $(incoming).data('nid');
-    $('.work-list-item[data-nid=' + nid + ']').addClass('active-proj');
+    $('.pager[data-nid=' + nid + ']').addClass('active-proj');
     var c = currFrame;
     //setTimeout(function(){c.cycle(0); c.parents('.miniframe').add('#info-trigger').removeClass('closed');}, 500);
   //update current project
@@ -191,18 +191,6 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
          currFrame = $('.proj-wrapper', optionHash.slides[optionHash.currSlide]);
          currFrame.replaceFirst().find('.img-loading:first, .img-loading:eq(1)').each(function(){$(this).replace()});
 
-        /*//if there is no next, load first
-        if( currFrame.next('.miniframe').find('.img-loading:first').replace().length == 0 )
-        {
-          $('.miniframe:first .img-loading:first').replace();
-        }
-        //same
-        if( currFrame.prev('.miniframe').find('.img-loading:first').replace().length == 0 )
-        {
-          $('.miniframe:last .img-loading:first').replace();
-        }
-        */
-        //if a project is already selected, remove the list
         if(optionHash.slideCount - optionHash.nextSlide == 1 && firstInit)
         {
           firstInit = !firstInit;

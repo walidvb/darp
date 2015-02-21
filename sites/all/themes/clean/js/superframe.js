@@ -93,19 +93,26 @@ right_ = function(e) {
   lastTime = new Date();
   currFrame.cycle('next');
 }
-toggleInfo = function(){
-  currFrame.parents('.miniframe').toggleClass('closed');
-  $('#info-trigger').toggleClass('closed');
-}
 
 //bind all events before they fire! :D
 //load further images
 $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, incoming, ff){
   //cancel whatever had been scheduled
-
+  if($('body').hasClass('menu-open'))
+  {
+    $('body').removeClass('menu-open')
+  }
   //if this is superframe
   if(event.target.className == "view-content")
   {
+    $('body').addClass('nothing-left');
+    var classToRemove = $(outgoingSlideEl).attr('data-title');
+
+    if(classToRemove !== void 0)
+    {
+      $('body').removeClass(classToRemove);
+    }
+    $('body').addClass($(incoming).attr('data-title'));
     //activate project in list
     currMiniframe = 0;
     $('.active-proj').removeClass('active-proj');
@@ -115,8 +122,6 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
     //setTimeout(function(){c.cycle(0); c.parents('.miniframe').add('#info-trigger').removeClass('closed');}, 500);
   //update current project
   currFrame = $('.proj-wrapper', incoming);
-  $('#info-trigger').removeClass('closed')
-
     //replace the image
     clearTimeout(superTimeOut);
     clearTimeout(timeOut);
@@ -137,6 +142,7 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
         }
 
       }, 900);
+
   }
   else //if miniframe
   {
@@ -169,9 +175,6 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
       $('body').removeClass('nothing-right');
     }
   }
-  //Clean up always
-  $('body').removeClass('clean');
-  $('.zoomImg').fadeOut(function(){$(this).remove()});
 });
 
 $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, incoming, forwardFlag)   {
@@ -184,18 +187,18 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
 
       if(event.target.className == "view-content")
       {
-         initialPageLoad = false;
-         var initialSlide = optionHash.currSlide;
-         $('.work-list-item').eq(initialSlide).addClass('active-proj');
+       initialPageLoad = false;
+       var initialSlide = optionHash.currSlide;
+       $('.work-list-item').eq(initialSlide).addClass('active-proj');
 
-         currFrame = $('.proj-wrapper', optionHash.slides[optionHash.currSlide]);
-         currFrame.replaceFirst().find('.img-loading:first, .img-loading:eq(1)').each(function(){$(this).replace()});
+       currFrame = $('.proj-wrapper', optionHash.slides[optionHash.currSlide]);
+       currFrame.replaceFirst().find('.img-loading:first, .img-loading:eq(1)').each(function(){$(this).replace()});
 
-        if(optionHash.slideCount - optionHash.nextSlide == 1 && firstInit)
-        {
-          firstInit = !firstInit;
-        }
-        
+       if(optionHash.slideCount - optionHash.nextSlide == 1 && firstInit)
+       {
+        firstInit = !firstInit;
+      }
+
         //bind keys
         Mousetrap.bind('up', up_);
         Mousetrap.bind('down', down_);
@@ -210,7 +213,7 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
     var left = $('<div id="left" class="nav arrow nav-horz">left</div>');
     var right = $('<div id="right" class="nav arrow nav-horz">right</div>');
     
-    var nav = up.add(down).add(left).add(right);
+    var nav = up.add(down).add(left).add(right).appendTo($('body'));
 
     var interval;
     //miniframes
@@ -244,21 +247,6 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
       var index = $('.miniframe[data-nid="'+nid+'"]').index();
       superframe.cycle(index);
     });
-
-    //Help
-    var helpClass = 'helper';
-    var helper = $('.'+helpClass);
-    function removeHelper(){
-      helper.addClass('helpout');
-    }
-    helper.click(removeHelper);
-    //resort projects on sort table
-    
-    //sort projects in views as well
-    var sortOrder = 'desc';
-    var lastSortOrder = 'desc';
-    var lastSort = 'year';
-
     //bind swipe
     $('body').bind('swipedown', up_);
     $('body').bind('swipeup', down_);
@@ -277,33 +265,32 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
     //bind arrows
     left.once('sfed', function(){$(this).on('click.nav', left_)});
     right.once('sfed', function(){$(this).on('click.nav', right_)});
-    Mousetrap.bind('i', toggleInfo);
 
     //bind mousewheel
-    superframe.on('mousewheel', wheelMove);
-    $('.proj-info, .proj-description').on('mousewheel', function(e){e.stopPropagation();})
-    function wheelMove(e, deltaY) {
-      //superframe.unbind('mousewheel', wheelMove);
-      var threshold = 0;
-      if(new Date() - lastTime > 900)
-      {
-        lastTime = new Date();
-        if(e.deltaX < threshold){
-          left_(e);
-          return;
-        }
-        else if(e.deltaX > threshold){
-          right_(e);
-          return;
-        }
-        if (e.deltaY > threshold) {
-          up_(e);
-        }
-        else if (e.deltaY < -threshold) {
-          down_(e);
-        }
-      }
-    }
+    // $('.slide-image').on('mousewheel', wheelMove);
+    // $(document, '.slide-image').on('mousewheel swipedown swipeup swiperight swipeleft', function(e){e.stopPropagation();})
+    // function wheelMove(e, deltaY) {
+    //   //superframe.unbind('mousewheel', wheelMove);
+    //   var threshold = 0;
+    //   if(new Date() - lastTime > 900)
+    //   {
+    //     lastTime = new Date();
+    //     if(e.deltaX < threshold){
+    //       left_(e);
+    //       return;
+    //     }
+    //     else if(e.deltaX > threshold){
+    //       right_(e);
+    //       return;
+    //     }
+    //     if (e.deltaY > threshold) {
+    //       up_(e);
+    //     }
+    //     else if (e.deltaY < -threshold) {
+    //       down_(e);
+    //     }
+    //   }
+    // }
 
   //EOBEHAVIOR  
 }

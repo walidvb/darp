@@ -16,7 +16,11 @@
     <!-- work list -->
     <section id="header">
          <?php print render($page['header']); ?>
-      </section>    
+    </section>
+    <div id="menu" class="running">
+      <div class="top"></div>
+    </div>
+
     <!-- /work list -->      
       
 <div id="page-wrapper">

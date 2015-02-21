@@ -79,57 +79,129 @@ body.html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000341}}
 #header {
-  top: 15px;
-  right: 15px;
-  position: fixed;
   z-index: 149;
-  overflow: auto;
   -webkit-overflow-scrolling: touch;
   text-transform: uppercase;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000344}}
+@media (max-width: 767px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000341}}
+  #header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 149;
+    -webkit-overflow-scrolling: touch;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateX(-100%);
+    transition: all 0.5s ease-in-out;
+  }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000355}}
+  .menu-open #header {
+    transform: translateX(0%);
+  }
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000360}}
 #header #darp-menu-header {
   margin-bottom: 1em;
 }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000364}}
+#header .region-header {
+  left: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  overflow: auto;
+  position: absolute;
+}
 @media (min-width: 767px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000341}}
-  #header {
-    transform: translateY(-50%);
-    top: 50%;
-    right: 35px;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000364}}
+  #header .region-header {
+    left: auto;
+    right: 10px;
   }
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000358}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000381}}
 #header .view-header {
   margin-bottom: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000361}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000384}}
 #header .pager {
   cursor: pointer;
   margin-bottom: 5px;
   color: gray;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000365}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000388}}
 #header .pager.active-proj, #header .pager:hover {
   color: black;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000368}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000391}}
 #header .pager[data-nid="117"] {
   margin-top: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000371}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000394}}
 #header .pager h2 {
   font-size: 12px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000374}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\0000397}}
 #header .pager h2, #header .pager img {
   display: inline;
   vertical-align: middle;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\000031}}
-#admin-menu {
-  display: none;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\00003105}}
+#menu {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  padding: 5px 0;
+  z-index: 1000;
+}
+@media (min-width: 767px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\00003105}}
+  #menu {
+    display: none;
+  }
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\00003115}}
+#menu .top {
+  position: relative;
+  margin-bottom: 25px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\00003118}}
+.menu-open #menu .top {
+  background-color: white;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\00003121}}
+#menu .top, #menu .top:before, #menu .top:after {
+  width: 20px;
+  height: 1px;
+  background-color: black;
+  transition: all 0.3s ease-in-out;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\00003127}}
+#menu .top:before, #menu .top:after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\00003132}}
+#menu .top:before {
+  transform: translateY(-6px);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\00003134}}
+.menu-open #menu .top:before {
+  transform: rotateZ(45deg);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\00003138}}
+#menu .top:after {
+  transform: translateY(6px);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_layout\.scss}line{font-family:\00003140}}
+.menu-open #menu .top:after {
+  transform: rotateZ(-45deg);
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\000035}}
@@ -139,9 +211,9 @@ body.html {
   right: 0;
   top: 50%;
   -webkit-transform: translateY(-50%);
-  min-width: 330px;
-  max-width: 330px;
-  min-height: 180px;
+  min-width: 80%;
+  max-width: 80%;
+  min-height: 100px;
   margin: auto;
   background: url("../img/darp_background.png");
   background-position: center;
@@ -187,32 +259,33 @@ body.html {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000352}}
 #contact .proj-desc-body {
+  font-size: 14px;
   display: table-cell;
   vertical-align: bottom;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000358}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000359}}
 html, body, .view-main, .view-main .view-content, .view-main .views-row, .proj-wrapper, .slide {
   height: 100%;
   width: 100%;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000363}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000364}}
 body .superframe {
   position: absolute;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000367}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000368}}
 body.page-projects {
   overflow: hidden;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000370}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000371}}
 .page-projects #page-wrapper {
   position: absolute;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000373}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000374}}
 .view-id-main {
   position: relative;
 }
@@ -220,7 +293,7 @@ body.page-projects {
 /* /CLEAN */
 /* WORKS LIST */
 /*  IMAGES  */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000383}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000384}}
 .proj-wrapper {
   overflow: hidden;
   transition: all 0.5s ease-out 0s;
@@ -229,46 +302,50 @@ body.page-projects {
   -o-transition: all 0.5s ease-out 0s;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000392}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000393}}
 .proj-desc-body {
   padding: 0 10px;
   overflow-x: hidden;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000396}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000397}}
 .text-slide-content .proj-short {
   font-style: italic;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000398}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\0000399}}
 .text-slide-content .proj-short .proj-title {
   text-transform: uppercase;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003101}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003102}}
 .text-slide-content .proj-short p {
   margin-bottom: 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003104}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003105}}
 .text-slide-content .proj-short .date_and_type {
   font-size: 1.1em;
   margin-bottom: 50px;
 }
-@media (min-width: 767px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003104}}
-  .text-slide-content .proj-short .date_and_type {
-    property: value;
-  }
-}
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003113}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003111}}
 .img-container {
-  height: calc(100% - 200px);
-  width: calc(100% - 200px);
-  transform: translateY(100px);
+  property: value;
+  height: calc(100% - 70px);
+  width: calc(100% - 70px);
+  transform: translateY(35px);
   box-sizing: border-box;
   margin: auto;
 }
+@media (min-width: 767px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003111}}
+  .img-container {
+    property: value;
+    height: calc(100% - 220px);
+    width: calc(100% - 220px);
+    transform: translateY(110px);
+  }
+}
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003120}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003128}}
 div.img-loading {
   background-image: url("../img/loading.gif");
   background-repeat: no-repeat;
@@ -276,12 +353,12 @@ div.img-loading {
   background-position: center, center;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003127}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003135}}
 :not(.closed) .proj-wrapper .img-loading {
   background-position: center, center;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003132}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003140}}
 .zoom-placeholder, .img-final {
   width: 100%;
   height: 100%;
@@ -292,19 +369,42 @@ div.img-loading {
   background-size: auto, contain;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003141}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003149}}
 .img-final {
   background-size: contain;
 }
 
 /* /IMAGES */
 /* PROJECT INFO */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003150}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003156}}
+.text-slide {
+  text-align: center;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003158}}
 .text-slide .project-desc-body {
   padding: 40px 10px;
 }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003163}}
+.text-slide.proj-description .text-slide-content {
+  text-align: left;
+}
+@media (min-width: 767px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003163}}
+  .text-slide.proj-description .text-slide-content {
+    display: flex;
+    justify-content: center;
+  }
+}
+@media (min-width: 767px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003171}}
+  .text-slide.proj-description .proj-desc {
+    align-items: center;
+    display: flex;
+    max-width: 80%;
+  }
+}
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003154}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003183}}
 .text-slide-content {
   position: absolute;
   right: 0;
@@ -315,23 +415,24 @@ div.img-loading {
   max-height: 100%;
   max-width: 70%;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   background-color: rgba(255, 255, 255, 0.8);
   margin: 0px auto;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003167}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003196}}
 .text-slide-content a {
   color: lime;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003169}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003198}}
 .text-slide-content a:hover {
   text-decoration: underline;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003173}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003202}}
 .text-slide-content p {
   margin-bottom: 15px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003177}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003206}}
 .proj-header {
   position: relative;
   /*top: -2.3em;*/
@@ -343,15 +444,14 @@ div.img-loading {
   background-color: white;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003188}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003217}}
 .proj-title {
   margin-bottom: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003192}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003221}}
 .proj-body {
   overflow: auto;
-  -webkit-overflow-scrolling: touch;
   position: absolute;
   top: 120px;
   bottom: 5px;
@@ -362,74 +462,59 @@ div.img-loading {
   -o-transition: all 0.4s ease-in-out;
 }
 @media (min-width: 767px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003192}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003221}}
   .proj-body {
     bottom: 65px;
   }
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003206}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003234}}
 .proj-body .proj-desc-body {
   padding: 0 10px;
 }
 
-@media only screen and (max-width: 768px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003212}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003239}}
+.text-slide-content {
+  max-width: 100%;
+  margin: 30px 30px;
+}
+@media (min-width: 767px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003239}}
   .text-slide-content {
     max-width: 100%;
-    padding: 10px 10px;
+    padding: 40px 0;
   }
 }
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003221}}
+
+@media (max-width: 767px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003250}}
   .proj-title {
     font-size: large;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003225}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003254}}
   .proj-body {
     font-size: 8px;
+  }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003257}}
+  .proj-info {
+    text-align: left;
   }
 }
 /* /PROJECT INFO */
 /* ARROWS */
 @media (min-width: 767px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003235}}
-  .helper {
-    transition: all 0.6s ease-out;
-    -webkit-transition: all 0.6s ease-out;
-    -moz-transition: all 0.6s ease-out;
-    background: rgba(0, 0, 0, 0.7);
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 101;
-  }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003246}}
-  .helper:after {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003268}}
+  .proj-thumbnail {
     position: absolute;
-    background-image: url("../img/keyboard.png");
-    background-size: auto;
-    background-position: center;
-    background-repeat: no-repeat;
-    top: 0;
-    bottom: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: auto;
     left: 0;
     right: 0;
-    transition: inherit;
-    content: '';
-    z-index: 103;
-    margin: auto;
-    cursor: pointer;
-  }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003262}}
-  .helper.helpout {
-    top: -100%;
-    bottom: 100%;
   }
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003268}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003277}}
 .nav {
   position: fixed;
   z-index: 100;
@@ -438,65 +523,88 @@ div.img-loading {
   width: 35px;
   text-shadow: 1px 1px 5px black;
   text-indent: -9999px;
+  transition: all 0.5s ease-in-out;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003278}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003287}}
 .nav.arrow {
   background-image: url("../img/arrow.jpg");
   background-repeat: no-repeat;
   background-size: contain;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003282}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003291}}
 .nav.arrow:hover {
   background-image: url("../img/arrow_black.jpg");
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003286}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003295}}
 :not(.mobile) .nav:hover {
   cursor: pointer;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003291}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003300}}
 .nav.nav-horz {
   top: 50%;
   -moz-transition: opacity 0.2s;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003296}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003305}}
 .nav.hidden.nav-horz {
   opacity: 0;
   visibility: hidden;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003301}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003310}}
 .nav.nav-vert {
   left: 50%;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003305}}
-.nav#up {
-  top: 8px;
+@media (max-width: 767px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003317}}
+  body.bios .nav.nav-vert, body.contact .nav.nav-vert {
+    opacity: 0.5;
+  }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003320}}
+  body.bios .nav#right, body.contact .nav#right {
+    right: -80px;
+  }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003323}}
+  body.bios .nav#left, body.contact .nav#left {
+    left: -80px;
+  }
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003309}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003328}}
+.nav#up {
+  top: 3px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003332}}
 .nav#down {
-  bottom: 8px;
-  -moz-transform: rotatez(-180deg);
-  -ms-transform: rotatez(-180deg);
-  -o-transform: rotatez(-180deg);
-  -webkit-transform: rotatez(-180deg);
+  bottom: 3px;
   transform: rotatez(-180deg);
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003318}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003337}}
 .nav#left {
-  left: 8px;
-  -moz-transform: rotatez(-90deg);
-  -ms-transform: rotatez(-90deg);
-  -o-transform: rotatez(-90deg);
-  -webkit-transform: rotatez(-90deg);
+  left: 3px;
   transform: rotatez(-90deg);
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003327}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003338}}
+.nothing-left .nav#left {
+  opacity: 0.5;
+}
+@media (min-width: 767px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003337}}
+  .nav#left {
+    left: 75px;
+  }
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003349}}
 .nav#right {
-  right: 8px;
-  -moz-transform: rotatez(90deg);
-  -ms-transform: rotatez(90deg);
-  -o-transform: rotatez(90deg);
-  -webkit-transform: rotatez(90deg);
+  right: 3px;
   transform: rotatez(90deg);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003350}}
+.nothing-right .nav#right {
+  opacity: 0.5;
+}
+@media (min-width: 767px) {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_projects\.scss}line{font-family:\00003349}}
+  .nav#right {
+    right: 75px;
+  }
 }
 
 /* /ARROWS */
@@ -506,7 +614,7 @@ div.img-loading {
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/gaston\/Sites\/darp\/sites\/all\/themes\/clean\/css\/_people\.scss}line{font-family:\000033}}
 #bios .text-slide-content .person {
-  margin-bottom: 1.5em;
+  margin-bottom: 2em;
   margin-top: 1em;
   font-weight: normal;
 }
@@ -569,7 +677,7 @@ div.img-loading {
     position: absolute;
     right: 0;
     top: calc(50% - 7.5px);
-    height: 3px;
+    height: 1px;
     width: 15px;
     background: #cdcdcd;
     display: block;

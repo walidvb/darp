@@ -2,10 +2,10 @@
     font-family: 'regencielight';
     src: url('../fonts/RegencieLightObl-webfont.eot');
     src: url('../fonts/RegencieLightObl-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/RegencieLightObl-webfont.woff2') format('woff2'),
-         url('../fonts/RegencieLightObl-webfont.woff') format('woff'),
-         url('../fonts/RegencieLightObl-webfont.ttf') format('truetype'),
-         url('../fonts/RegencieLightObl-webfont.svg#regencielightobl') format('svg');
+    url('../fonts/RegencieLightObl-webfont.woff2') format('woff2'),
+    url('../fonts/RegencieLightObl-webfont.woff') format('woff'),
+    url('../fonts/RegencieLightObl-webfont.ttf') format('truetype'),
+    url('../fonts/RegencieLightObl-webfont.svg#regencielightobl') format('svg');
     font-weight: normal;
     font-style: italic;
 
@@ -18,10 +18,10 @@
     font-family: 'regencielight';
     src: url('../fonts/RegencieLight-webfont.eot');
     src: url('../fonts/RegencieLight-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/RegencieLight-webfont.woff2') format('woff2'),
-         url('../fonts/RegencieLight-webfont.woff') format('woff'),
-         url('../fonts/RegencieLight-webfont.ttf') format('truetype'),
-         url('../fonts/RegencieLight-webfont.svg#regencielight') format('svg');
+    url('../fonts/RegencieLight-webfont.woff2') format('woff2'),
+    url('../fonts/RegencieLight-webfont.woff') format('woff'),
+    url('../fonts/RegencieLight-webfont.ttf') format('truetype'),
+    url('../fonts/RegencieLight-webfont.svg#regencielight') format('svg');
     font-weight: normal;
     font-style: normal;
 
@@ -33,28 +33,51 @@ body.html{
     @media #{$tablet}
     {
       font-size: 16px;
-    }
-    letter-spacing: 0.05em;
-	background-color: white;
+  }
+  letter-spacing: 0.05em;
+  background-color: white;
 }
 
 #header{
-    top: 15px;
-    right: 15px;
+    @media #{$mobile}
+    {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 149;
+        -webkit-overflow-scrolling: touch;
+        text-transform: uppercase;
+        background: rgba(255,255,255,0.8);
+        transform: translateX(-100%);
+        transition: all 0.5s ease-in-out;
+        .menu-open &{
+            transform: translateX(0%);
+        }
+        
+    }
     #darp-menu-header{
         margin-bottom: 1em;
     }
-    @media #{$tablet}
+    .region-header
     {
-        transform: translateY(-50%);
+        left: 50px;
         top: 50%;
-        right: 35px;
+        transform: translateY(-50%);
+        z-index: 1000;
+        @media #{$tablet}
+        {
+            left: auto;
+            right: 10px;
+        }
+        overflow: auto;
+        position: absolute;
     }
-    position: fixed;
     z-index: 149;
-    overflow: auto;
     -webkit-overflow-scrolling: touch;
     text-transform: uppercase;
+
     .view-header{
         margin-bottom: 1em;
     }
@@ -76,4 +99,48 @@ body.html{
             vertical-align: middle;
         }
     }
+}
+$gap: 6px;
+#menu 
+{
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    padding: 5px 0;
+    z-index: 1000;
+    @media #{$tablet}
+    {
+      display:  none;
+  }
+  .top {
+      position: relative;
+      margin-bottom: 25px;
+      .menu-open & {
+          background-color: white;
+      }
+      &, &:before, &:after {
+        width: 20px;
+        height: 1px;
+        background-color: black;
+        transition: all 0.3s ease-in-out;
+    }
+    &:before, &:after {
+      content: "";
+      display: inline-block;
+      position: absolute;
+  }
+  &:before{
+      transform: translateY(-$gap);
+      .menu-open &{
+        transform: rotateZ(45deg);
+    }
+}
+&:after{
+  transform: translateY($gap);
+  .menu-open &{
+    transform: rotateZ(-45deg);
+}
+}
+}
+
 }

@@ -221,10 +221,8 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
     var down = $('<div id="down" class="nav arrow nav-vert">down</div>');
     var left = $('<div id="left" class="nav arrow nav-horz">left</div>');
     var right = $('<div id="right" class="nav arrow nav-horz">right</div>');
-    var info = $('<div id="info-trigger" class="nav"></div>');
     
     var nav = up.add(down).add(left).add(right);
-    nav.add(info).appendTo($('body'));
 
     var interval;
     //miniframes
@@ -291,7 +289,6 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
     //bind arrows
     left.once('sfed', function(){$(this).on('click.nav', left_)});
     right.once('sfed', function(){$(this).on('click.nav', right_)});
-    info.once('sfed', function(){$(this).on('click.nav', toggleInfo)});
     Mousetrap.bind('i', toggleInfo);
 
     //bind mousewheel

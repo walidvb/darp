@@ -1,3 +1,6 @@
+#admin-menu{
+	display: none;
+}
 #contact, #intro{
 	.proj-desc{
 		position: absolute;
@@ -5,9 +8,15 @@
 		right: 0;
 		top: 50%;
 		-webkit-transform: translateY(-50%);
-		min-width: 450px;
-		max-width: 450px;
-		min-height: 250px;
+		min-width: 330px;
+		max-width: 330px;
+		min-height: 180px;
+		@media #{$tablet}
+		{
+			min-width: 450px;
+			max-width: 450px;
+			min-height: 250px;
+		}
 		margin: auto;
 		background: url("../img/darp_background.png");
 		background-position: center;
@@ -35,14 +44,14 @@
 		margin-bottom: 0;
 	}
 	.proj-desc-body{
+		text-align: center;
 		vertical-align: middle;
 	}
 }
 #contact{
 	.proj-desc-body{
-		text-align: left;
-			display: table-cell;
-			vertical-align: bottom;
+		display: table-cell;
+		vertical-align: bottom;
 	}
 }
 
@@ -123,8 +132,20 @@ body.page-projects{
 }
 
 $padding: 15px;
-.img-container, .proj-info, .proj-description{
-	padding: $padding;
+.proj-desc-body{
+	padding: 0 10px;
+	overflow-x: hidden;
+}
+.proj-short{
+	font-style: italic;
+	.proj-title{
+		text-transform: uppercase;
+	}
+	.date_and_type{
+		font-size: 1.1em;
+	}
+}
+.img-container{
 	height: calc(100% - #{2 * $padding});
 	width: calc(100% - #{2 * $padding});
 	box-sizing: border-box;
@@ -172,7 +193,10 @@ div.img-loading{
 /* PROJECT INFO */
 $margin: 10px;
 .text-slide{
-	padding: 40px 10px;
+	.project-desc-body
+	{
+		padding: 40px 10px;
+	}
 }
 .text-slide-content{
 	position: absolute;
@@ -181,7 +205,6 @@ $margin: 10px;
 	top: 0;
 	bottom: 0;
 	z-index: 900;
-	text-align: center;
 	max-height: 100%;
 	max-width: 70%;
 	overflow: auto;
@@ -237,87 +260,17 @@ $margin: 10px;
 	-moz-transition: all 0.4s ease-in-out;
 	-o-transition: all 0.4s ease-in-out;
 	.proj-desc-body{
-		.green{
-			color: $brand;
-		}
-	}
-}
-
-@media only screen  
-and (min-width : 768px) 
-and (max-width : 1024px) {
-	.proj-info{
-		width: 45%;
-		left:0%;
-		padding: 40px 5px 0px 5px;
-		margin: 0px 0px;
-	}
-
-	.closed .proj-info, .clean .proj-info{
-		left: -50%;
-	}
-
-	#info-trigger{
-		left: 47%;
-	}
-
-	.closed #info-trigger{
+		padding: 0 10px;
 	}
 }
 
 @media only screen and (max-width : 768px) {
-	.proj-info{
-		width: 100%;
-		top:0%;
-		left: 0;
-		margin: 0px 0px;
-		height: 45%;
-		bottom: auto;
+	.text-slide-content{
+		max-width: 100%;
+		padding: 10px 10px;
 	}
 
-	.proj-body{
-		padding: 0px 0px 15px 0px;
-	}
 
-	.closed .proj-info, .clean .proj-info{
-		top: -53%;
-		left: 0;
-
-	}
-	.views-row:not(.closed) .proj-wrapper{
-		top: 50%;
-		height: 50%;
-	}
-	#info-trigger{
-		top: 53%;
-		left: 5%;
-	}
-
-	#info-trigger.closed{
-		top: 0.7%;
-	}
-
-	.proj-desc{
-		bottom: 5px;
-	}
-
-	.zoom-placeholder, .img-final, a.link-to-img{
-		width:	100%;
-		height: 100.7%;
-		top: 0%;
-		left:0;
-	}
-
-	.closed .proj-wrapper .zoom-placeholder, .closed .proj-wrapper .img-final{
-		top: -1%;
-		left:0;
-	}
-	:not(.closed) .proj-wrapper .img-loading{
-		background-position: center center, center;
-	}
-	.proj-team-img {
-		right: 15px;
-	}
 }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px){

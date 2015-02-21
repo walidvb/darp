@@ -1,43 +1,36 @@
-/* TYPO FONTS */
 @font-face {
-    font-family: 'akzidenz';
-    src: url('../fonts/akzidenz-grotesk-roman-webfont.eot');
-    src: url('../fonts/akzidenz-grotesk-roman-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/akzidenz-grotesk-roman-webfont.woff') format('woff'),
-    url('../fonts/akzidenz-grotesk-roman-webfont.ttf') format('truetype'),
-    url('../fonts/akzidenz-grotesk-roman-webfont.svg#akzidenzgroteskregular') format('svg');
-    font-weight: light;
-    font-style: normal;
+    font-family: 'regencielight';
+    src: url('../fonts/RegencieLightObl-webfont.eot');
+    src: url('../fonts/RegencieLightObl-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/RegencieLightObl-webfont.woff2') format('woff2'),
+         url('../fonts/RegencieLightObl-webfont.woff') format('woff'),
+         url('../fonts/RegencieLightObl-webfont.ttf') format('truetype'),
+         url('../fonts/RegencieLightObl-webfont.svg#regencielightobl') format('svg');
+    font-weight: normal;
+    font-style: italic;
 
 }
 
+
+
+
 @font-face {
-    font-family: 'akzidenz';
-    src: url('../fonts/akzidenz-grotesk-light-webfont.eot');
-    src: url('../fonts/akzidenz-grotesk-light-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/akzidenz-grotesk-light-webfont.woff') format('woff'),
-    url('../fonts/akzidenz-grotesk-light-webfont.ttf') format('truetype'),
-    url('../fonts/akzidenz-grotesk-light-webfont.svg#akzidenzgroteskregular') format('svg');
+    font-family: 'regencielight';
+    src: url('../fonts/RegencieLight-webfont.eot');
+    src: url('../fonts/RegencieLight-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/RegencieLight-webfont.woff2') format('woff2'),
+         url('../fonts/RegencieLight-webfont.woff') format('woff'),
+         url('../fonts/RegencieLight-webfont.ttf') format('truetype'),
+         url('../fonts/RegencieLight-webfont.svg#regencielight') format('svg');
     font-weight: normal;
     font-style: normal;
 
 }
 
-@font-face {
-    font-family: 'akzidenz';
-    src: url('../fonts/akzidenz-grotesk-black-webfont.eot');
-    src: url('../fonts/akzidenz-grotesk-black-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/akzidenz-grotesk-black-webfont.woff') format('woff'),
-    url('../fonts/akzidenz-grotesk-black-webfont.ttf') format('truetype'),
-    url('../fonts/akzidenz-grotesk-black-webfont.svg#akzidenzgroteskregular') format('svg');
-    font-weight: bold;
-    font-style: normal;
-
-}
-
 body.html{
-	font-family: akzidenz, Helvetica, sans-serif; 
+	font-family: regencielight, Helvetica, sans-serif; 
 	font-size: 16px;
+    letter-spacing: 0.05em;
 	background-color: white;
 }
 

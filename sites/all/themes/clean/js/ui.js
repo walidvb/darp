@@ -25,7 +25,22 @@
 			Mousetrap.bind('esc', function(){
 				$('body').removeClass('list-closed');
 			});
-			
+		
+		var titles = $('.title');
+		titles.click(function(e){
+			$(this).toggleClass('open');
+			var exps = $(this).next('.bio-exps');
+			exps.toggleClass('open').slideToggle()
+
+			var isVisible = false;
+			$('.bio-exps').each(function(){
+				console.log("$(this).hasClass('open')", $(this).hasClass('open'))
+				if($(this).hasClass('open')){	
+					isVisible = true;
+				}
+			})
+			$(this).parents('.text-slide-content').toggleClass('bio-open', isVisible);
+		});
 		//if mobile
 		var mobile;
 		if(/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))

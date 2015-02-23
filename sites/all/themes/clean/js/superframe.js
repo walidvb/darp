@@ -163,10 +163,10 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
     }
 
     //fade arrows
-    if(optionHash.currSlide == 0){
+    if(optionHash.nextSlide == 0){
       $('body').addClass('nothing-left');
     }
-    else if(optionHash.currSlide == optionHash.slidesCount)
+    else if(optionHash.nextSlide == optionHash.slideCount - 1)
     {
       $('body').addClass('nothing-right');
     }
@@ -222,6 +222,7 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
       fx: 'scrollHorz',
       slides: '> .slide',
       autoHeight: false,
+      allowWrap: false,
     }
 
     $('.proj-wrapper').each(function() {
@@ -247,16 +248,17 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
       var index = $('.miniframe[data-nid="'+nid+'"]').index();
       superframe.cycle(index);
     });
+
     //bind swipe
-    $('body').bind('swipedown', up_);
-    $('body').bind('swipeup', down_);
-    $('body').bind('swipeleft', right_);
-    $('body').bind('swiperight', left_);
+    // $('.slide-image').bind('swipedown', up_);
+    // $('.slide-image').bind('swipeup', down_);
+    // $('.slide-image').bind('swipeleft', right_);
+    // $('.slide-image').bind('swiperight', left_);
     //prevent swipeVert on info
-    $('.proj-info').bind('touchstart', function(e)
-    {
-      e.stopPropagation();
-    });
+    // $('.proj-info').bind('touchstart', function(e)
+    // {
+    //   e.stopPropagation();
+    // });
 
     //bind key events (rest is bound on init)
     Mousetrap.bind('left', left_);

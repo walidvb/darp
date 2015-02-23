@@ -1,4 +1,4 @@
-$slide-padding: 110px;
+$slide-padding: 240px;
 $slide-padding-mobile: 35px;
 
 #contact, #intro{
@@ -110,17 +110,17 @@ body.page-projects{
 
 .img-container{
 		$padding: $slide-padding-mobile;
-	  property:  value;
-		height: calc(100% - #{2 * $padding});
+		$padding-vert: 40px;
 		width: calc(100% - #{2 * $padding});
-		transform: translateY($padding);
+		height: calc(100% - #{2 * $padding-vert});
+		transform: translateY($padding-vert);
 	@media #{$tablet}
 	{
 		$padding: $slide-padding;
 	  property:  value;
-		height: calc(100% - #{2 * $padding});
 		width: calc(100% - #{2 * $padding});
-		transform: translateY($padding);
+		height: calc(100% - #{2 * $padding-vert});
+		transform: translateY($padding-vert);
 	}
 	box-sizing: border-box;
 	margin: auto;
@@ -161,20 +161,24 @@ $margin: 10px;
 	text-align: center;
 	&.proj-description{
 		.text-slide-content{
-			@media #{$tablet}
+			text-align: left;
+			@media #{$lg}
 			{
 				display: flex;
 				justify-content: center;
 			}
-			text-align: left;
 		}
 		.proj-desc{
 
+			@media #{$lg}{
+				align-items: center;
+				display: flex;
+				max-width:	calc(100% - #{2 * $slide-padding});
+			}
 			@media #{$tablet}
 			{
-			align-items: center;
-			display: flex;
-				max-width: 80%;
+				max-width:	calc(100% - #{$slide-padding});
+				margin: auto;
 			}
 		}
 	}
@@ -335,25 +339,25 @@ $margin: 10px;
 	}
 
 	&#left{
-		.nothing-left &{
+		.nothing-left &, .bios &, .contact &{
 			opacity: 0.5;
 		}
 			left: 3px;
 		@media #{$tablet}
 		{
-			left: 75px;
+			left: 80px;
 		}
 		transform: rotatez(-90deg)
 	}
 
 	&#right{
-		.nothing-right &{
+		.nothing-right &, .bios &, .contact &{
 			opacity: 0.5;
 		}
 			right: 3px;
 		@media #{$tablet}
 		{
-			right: 75px;
+			right: 80px;
 		}
 		transform: rotatez(90deg)
 	}

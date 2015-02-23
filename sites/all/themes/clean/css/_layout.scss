@@ -29,10 +29,11 @@
 
 body.html{
 	font-family: regencielight, Helvetica, sans-serif; 
-	font-size: 14px;
+	font-size: 12px;
+    overflow: hidden;
     @media #{$tablet}
     {
-      font-size: 16px;
+      font-size: 14px;
   }
   letter-spacing: 0.05em;
   background-color: white;
@@ -49,7 +50,7 @@ body.html{
         z-index: 149;
         -webkit-overflow-scrolling: touch;
         text-transform: uppercase;
-        background: rgba(255,255,255,0.8);
+        background: rgba(255,255,255,0.9);
         transform: translateX(-100%);
         transition: all 0.5s ease-in-out;
         .menu-open &{
@@ -69,7 +70,7 @@ body.html{
         @media #{$tablet}
         {
             left: auto;
-            right: 10px;
+            right: 15px;
         }
         overflow: auto;
         position: absolute;
@@ -84,7 +85,7 @@ body.html{
     .pager{
         cursor: pointer;
         margin-bottom: 5px;
-        color: lighten(black , 50%);
+        color: lighten(black , 60%);
         &.active-proj, &:hover{
             color: black;
         }

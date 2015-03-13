@@ -26,7 +26,6 @@
 $nid = $fields['nid']->content;
 unset($fields['nid']);
 ?>
-
 <div class="pager" data-nid="<?php print $nid; ?>">
 	<?php foreach ($fields as $id => $field): ?>
 	  <?php if (!empty($field->separator)): ?>

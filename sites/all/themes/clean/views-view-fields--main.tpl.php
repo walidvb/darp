@@ -76,7 +76,9 @@ $sortable['status'] = $fields['field_status']->content;
  			<?php endif; ?>
  			<?php if($body): ?>
  				<div class="proj-description text-slide slide">
- 					<div class="text-slide-content"><?php print $body ?></div>
+ 					<div class="text-slide-content">
+ 						<?php print $body ?>
+ 					</div>
  				</div>
  			<?php endif; ?>
  			<?php print $images ?>

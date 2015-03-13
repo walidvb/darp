@@ -244,7 +244,7 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
     //List
     $(document).bind('click', '.pager',function(e){
       var $this = $(e.target).parents("[data-nid]");
-      var nid = $this.attr('data-nid');
+      var nid = $(e.target).attr('data-nid') || $this.attr('data-nid');
       var index = $('.miniframe[data-nid="'+nid+'"]').index();
       superframe.cycle(index);
     });

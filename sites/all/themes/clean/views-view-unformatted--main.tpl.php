@@ -6,7 +6,7 @@
  * @ingroup views_templates
  */
 ?>
-<div class="views-row miniframe" id="intro">
+<div class="views-row miniframe" id="intro" data-nid="darp">
 	<div class="proj-wrapper">
 			<div class="proj-description text-slide slide">
 				<div class="text-slide-content">

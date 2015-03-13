@@ -177,7 +177,7 @@ $margin: 10px;
 			}
 			@media #{$tablet}
 			{
-				max-width:	calc(100% - #{$slide-padding});
+				max-width:	calc(100% - #{2 * $slide-padding});
 				margin: auto;
 			}
 		}
@@ -337,7 +337,7 @@ $margin: 10px;
 		bottom:3px;
 		transform: rotatez(-180deg)
 	}
-
+	$arrow-padding: 120px;
 	&#left{
 		.nothing-left &, .bios &, .contact &{
 			opacity: 0.5;
@@ -345,7 +345,7 @@ $margin: 10px;
 			left: 3px;
 		@media #{$tablet}
 		{
-			left: 80px;
+			left: $arrow-padding;
 		}
 		transform: rotatez(-90deg)
 	}
@@ -357,7 +357,7 @@ $margin: 10px;
 			right: 3px;
 		@media #{$tablet}
 		{
-			right: 80px;
+			right: $arrow-padding;
 		}
 		transform: rotatez(90deg)
 	}

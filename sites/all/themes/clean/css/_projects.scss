@@ -289,11 +289,11 @@ $margin: 10px;
 	transition: all 0.5s ease-in-out;
 
 	&.arrow{
-		background-image: url("../img/arrow.jpg");
+		background-image: url("../img/arrow.png");
 		background-repeat: no-repeat;
 		background-size: contain;	
 		&:hover{
-			background-image: url("../img/arrow_black.jpg");
+			background-image: url("../img/arrow_black.png");
 		}
 	}
 	:not(.mobile) &:hover{

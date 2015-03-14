@@ -1,23 +1,21 @@
 /*!
- * jQuery Cycle2 - Version: BETA-1 (27-AUG-2012)
- * http://malsup.com/jquery/cycle2/
- * Copyright (c) 2012 M. Alsup
- * Dual licensed: MIT or GPL
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- * Requires: jQuery v1.7 or later
- */
+* jQuery Cycle2; version: 2.1.6 build: 20141007
+* http://jquery.malsup.com/cycle2/
+* Copyright (c) 2014 M. Alsup; Dual licensed: MIT/GPL
+*/
+
+/* Cycle2 core engine */
 ;(function($) {
 "use strict";
 
-var version = 'BETA-1';
+var version = '2.1.6';
 
 $.fn.cycle = function( options ) {
     // fix mistakes with the ready state
     var o;
     if ( this.length === 0 && !$.isReady ) {
         o = { s: this.selector, c: this.context };
-        log('requeuing slideshow (dom not ready)');
+        $.fn.cycle.log('requeuing slideshow (dom not ready)');
         $(function() {
             $( o.s, o.c ).cycle(options);
         });
@@ -27,6 +25,7 @@ $.fn.cycle = function( options ) {
     return this.each(function() {
         var data, opts, shortName, val;
         var container = $(this);
+        var log = $.fn.cycle.log;
 
         if ( container.data('cycle.opts') )
             return; // already initialized
@@ -50,43 +49,55 @@ $.fn.cycle = function( options ) {
         }
 
         opts = $.extend( {}, $.fn.cycle.defaults, data, options || {});
-        container.data('cycle.opts', opts);
 
         opts.timeoutId = 0;
-        opts.paused = 0;
+        opts.paused = opts.paused || false; // #57
         opts.container = container;
         opts._maxZ = opts.maxZ;
 
-        opts.API = $.extend ( {}, $.fn.cycle.API );
+        opts.API = $.extend ( { _container: container }, $.fn.cycle.API );
         opts.API.log = log;
         opts.API.trigger = function( eventName, args ) {
             opts.container.trigger( eventName, args );
             return opts.API;
         };
 
+        container.data( 'cycle.opts', opts );
+        container.data( 'cycle.API', opts.API );
+
         // opportunity for plugins to modify opts and API
         opts.API.trigger('cycle-bootstrap', [ opts, opts.API ]);
 
-        opts.API.addInitialSlides( opts );
-        opts.API.preInitSlideshow( opts );
+        opts.API.addInitialSlides();
+        opts.API.preInitSlideshow();
 
         if ( opts.slides.length )
-            opts.API.initSlideshow( opts );
+            opts.API.initSlideshow();
     });
 };
 
 $.fn.cycle.API = {
-    addInitialSlides: function( opts ) {
+    opts: function() {
+        return this._container.data( 'cycle.opts' );
+    },
+    addInitialSlides: function() {
+        var opts = this.opts();
         var slides = opts.slides;
         opts.slideCount = 0;
         opts.slides = $(); // empty set
         
         // add slides that already exist
         slides = slides.jquery ? slides : opts.container.find( slides );
-        opts.API.add( opts, slides );
+
+        if ( opts.random ) {
+            slides.sort(function() {return Math.random() - 0.5;});
+        }
+
+        opts.API.add( slides );
     },
 
-    preInitSlideshow: function( opts ) {
+    preInitSlideshow: function() {
+        var opts = this.opts();
         opts.API.trigger('cycle-pre-initialize', [ opts ]);
         var tx = $.fn.cycle.transitions[opts.fx];
         if (tx && $.isFunction(tx.preInit))
@@ -94,55 +105,108 @@ $.fn.cycle.API = {
         opts._preInitialized = true;
     },
 
-    postInitSlideshow: function( opts ) {
+    postInitSlideshow: function() {
+        var opts = this.opts();
         opts.API.trigger('cycle-post-initialize', [ opts ]);
         var tx = $.fn.cycle.transitions[opts.fx];
         if (tx && $.isFunction(tx.postInit))
             tx.postInit( opts );
     },
 
-    initSlideshow: function( opts ) {
-        opts.API.calcFirstSlide( opts );
+    initSlideshow: function() {
+        var opts = this.opts();
+        var pauseObj = opts.container;
+        var slideOpts;
+        opts.API.calcFirstSlide();
 
-        if (opts.container.css('position') == 'static')
+        if ( opts.container.css('position') == 'static' )
             opts.container.css('position', 'relative');
 
-        $(opts.slides[opts.currSlide]).css('opacity',1).show();
-        opts.API.stackSlides( opts, opts.slides[opts.currSlide], opts.slides[opts.nextSlide], !opts.reverse );
+        $(opts.slides[opts.currSlide]).css({
+            opacity: 1,
+            display: 'block',
+            visibility: 'visible'
+        });
+        opts.API.stackSlides( opts.slides[opts.currSlide], opts.slides[opts.nextSlide], !opts.reverse );
 
-        if (opts.pauseOnHover) {
-            opts.container.hover(
-                function(){ 
-                    opts.paused = 1; 
-                    opts.API.trigger('cycle-paused', [ opts ] );
-                }, 
-                function(){ 
-                    opts.paused = 0; 
-                    opts.API.trigger('cycle-resumed', [ opts ] );
-                }
+        if ( opts.pauseOnHover ) {
+            // allow pauseOnHover to specify an element
+            if ( opts.pauseOnHover !== true )
+                pauseObj = $( opts.pauseOnHover );
+
+            pauseObj.hover(
+                function(){ opts.API.pause( true ); }, 
+                function(){ opts.API.resume( true ); }
             );
         }
 
         // stage initial transition
         if ( opts.timeout ) {
-            opts.timeoutId = setTimeout(function() {
-                opts.API.prepareTx( opts, false, !opts.reverse );
-            }, opts.timeout + opts.delay);
+            slideOpts = opts.API.getSlideOpts( opts.currSlide );
+            opts.API.queueTransition( slideOpts, slideOpts.timeout + opts.delay );
         }
 
         opts._initialized = true;
-        opts.API.updateView( opts );
-        opts.container.on('cycle-paused cycle-resumed', function(e) {
-            opts.container[ e.type === 'cycle-paused' ? 'addClass' : 'removeClass' ]('cycle-paused');
-        });
+        opts.API.updateView( true );
         opts.API.trigger('cycle-initialized', [ opts ]);
-        opts.API.postInitSlideshow( opts );
+        opts.API.postInitSlideshow();
     },
 
+    pause: function( hover ) {
+        var opts = this.opts(),
+            slideOpts = opts.API.getSlideOpts(),
+            alreadyPaused = opts.hoverPaused || opts.paused;
 
-    add: function( opts, slides, prepend ) {
+        if ( hover )
+            opts.hoverPaused = true; 
+        else
+            opts.paused = true;
+
+        if ( ! alreadyPaused ) {
+            opts.container.addClass('cycle-paused');
+            opts.API.trigger('cycle-paused', [ opts ]).log('cycle-paused');
+
+            if ( slideOpts.timeout ) {
+                clearTimeout( opts.timeoutId );
+                opts.timeoutId = 0;
+                
+                // determine how much time is left for the current slide
+                opts._remainingTimeout -= ( $.now() - opts._lastQueue );
+                if ( opts._remainingTimeout < 0 || isNaN(opts._remainingTimeout) )
+                    opts._remainingTimeout = undefined;
+            }
+        }
+    },
+
+    resume: function( hover ) {
+        var opts = this.opts(),
+            alreadyResumed = !opts.hoverPaused && !opts.paused,
+            remaining;
+
+        if ( hover )
+            opts.hoverPaused = false; 
+        else
+            opts.paused = false;
+
+    
+        if ( ! alreadyResumed ) {
+            opts.container.removeClass('cycle-paused');
+            // #gh-230; if an animation is in progress then don't queue a new transition; it will
+            // happen naturally
+            if ( opts.slides.filter(':animated').length === 0 )
+                opts.API.queueTransition( opts.API.getSlideOpts(), opts._remainingTimeout );
+            opts.API.trigger('cycle-resumed', [ opts, opts._remainingTimeout ] ).log('cycle-resumed');
+        }
+    },
+
+    add: function( slides, prepend ) {
+        var opts = this.opts();
         var oldSlideCount = opts.slideCount;
         var startSlideshow = false;
+        var len;
+
+        if ( $.type(slides) == 'string')
+            slides = $.trim( slides );
 
         $( slides ).each(function(i) {
             var slideOpts;
@@ -154,36 +218,37 @@ $.fn.cycle.API = {
                 opts.container.append( slide );
 
             opts.slideCount++;
-            slideOpts = opts.API.buildSlideOpts( opts, slide );
+            slideOpts = opts.API.buildSlideOpts( slide );
 
             if ( prepend )
                 opts.slides = $( slide ).add( opts.slides );
             else
                 opts.slides = opts.slides.add( slide );
 
-            opts.API.initSlide(opts, slideOpts, slide, --opts._maxZ );
+            opts.API.initSlide( slideOpts, slide, --opts._maxZ );
 
             slide.data('cycle.opts', slideOpts);
             opts.API.trigger('cycle-slide-added', [ opts, slideOpts, slide ]);
         });
 
-        opts.API.updateView( opts );
+        opts.API.updateView( true );
 
         startSlideshow = opts._preInitialized && (oldSlideCount < 2 && opts.slideCount >= 1);
         if ( startSlideshow ) {
             if ( !opts._initialized )
-                opts.API.initSlideshow( opts );
+                opts.API.initSlideshow();
             else if ( opts.timeout ) {
-                opts.timeoutId = setTimeout(function() {
-                    var len = opts.slides.length;
-                    opts.nextSlide = opts.reverse ? len - 1 : 1;
-                    opts.API.prepareTx( opts, false, !opts.reverse );
-                }, opts.timeout + opts.delay);
+                len = opts.slides.length;
+                opts.nextSlide = opts.reverse ? len - 1 : 1;
+                if ( !opts.timeoutId ) {
+                    opts.API.queueTransition( opts );
+                }
             }
         }
     },
 
-    calcFirstSlide: function( opts ) {
+    calcFirstSlide: function() {
+        var opts = this.opts();
         var firstSlideIndex;
         firstSlideIndex = parseInt( opts.startingSlide || 0, 10 );
         if (firstSlideIndex >= opts.slides.length || firstSlideIndex < 0)
@@ -202,7 +267,8 @@ $.fn.cycle.API = {
         }
     },
 
-    calcNextSlide: function( opts ) {
+    calcNextSlide: function() {
+        var opts = this.opts();
         var roll;
         if ( opts.reverse ) {
             roll = (opts.nextSlide - 1) < 0;
@@ -216,29 +282,38 @@ $.fn.cycle.API = {
         }
     },
 
-    calcTx: function( opts, manual ) {
+    calcTx: function( slideOpts, manual ) {
+        var opts = slideOpts;
         var tx;
-        if ( manual && opts.manualFx )
+
+        if ( opts._tempFx )
+            tx = $.fn.cycle.transitions[opts._tempFx];
+        else if ( manual && opts.manualFx )
             tx = $.fn.cycle.transitions[opts.manualFx];
+
         if ( !tx )
             tx = $.fn.cycle.transitions[opts.fx];
 
+        opts._tempFx = null;
+        this.opts()._tempFx = null;
+
         if (!tx) {
             tx = $.fn.cycle.transitions.fade;
-            log('Transition "' + opts.fx + '" not found.  Using fade.');
+            opts.API.log('Transition "' + opts.fx + '" not found.  Using fade.');
         }
         return tx;
     },
 
-    prepareTx: function( opts, manual, fwd ) {
+    prepareTx: function( manual, fwd ) {
+        var opts = this.opts();
         var after, curr, next, slideOpts, tx;
 
         if ( opts.slideCount < 2 ) {
             opts.timeoutId = 0;
             return;
         }
-        if ( manual ) {
-            opts.API.stopTransition( opts );
+        if ( manual && ( !opts.busy || opts.manualTrump ) ) {
+            opts.API.stopTransition();
             opts.busy = false;
             clearTimeout(opts.timeoutId);
             opts.timeoutId = 0;
@@ -250,7 +325,7 @@ $.fn.cycle.API = {
 
         curr = opts.slides[opts.currSlide];
         next = opts.slides[opts.nextSlide];
-        slideOpts = opts.API.getSlideOpts( opts, opts.nextSlide );
+        slideOpts = opts.API.getSlideOpts( opts.nextSlide );
         tx = opts.API.calcTx( slideOpts, manual );
 
         opts._tx = tx;
@@ -258,37 +333,53 @@ $.fn.cycle.API = {
         if ( manual && slideOpts.manualSpeed !== undefined )
             slideOpts.speed = slideOpts.manualSpeed;
 
-        if ( opts.nextSlide != opts.currSlide && (manual || (!opts.paused && opts.timeout) )) {
+        // if ( opts.nextSlide === opts.currSlide )
+        //     opts.API.calcNextSlide();
+
+        // ensure that:
+        //      1. advancing to a different slide
+        //      2. this is either a manual event (prev/next, pager, cmd) or 
+        //              a timer event and slideshow is not paused
+        if ( opts.nextSlide != opts.currSlide && 
+            (manual || (!opts.paused && !opts.hoverPaused && opts.timeout) )) { // #62
+
             opts.API.trigger('cycle-before', [ slideOpts, curr, next, fwd ]);
             if ( tx.before )
                 tx.before( slideOpts, curr, next, fwd );
 
             after = function() {
                 opts.busy = false;
+                // #76; bail if slideshow has been destroyed
+                if (! opts.container.data( 'cycle.opts' ) )
+                    return;
+
                 if (tx.after)
                     tx.after( slideOpts, curr, next, fwd );
                 opts.API.trigger('cycle-after', [ slideOpts, curr, next, fwd ]);
-                opts.API.queueTransition(opts, slideOpts);
-                opts.API.updateView( opts );
+                opts.API.queueTransition( slideOpts);
+                opts.API.updateView( true );
             };
 
             opts.busy = true;
             if (tx.transition)
                 tx.transition(slideOpts, curr, next, fwd, after);
             else
-                opts.API.doTransition(slideOpts, curr, next, fwd, after);
+                opts.API.doTransition( slideOpts, curr, next, fwd, after);
 
-            opts.API.calcNextSlide( opts );
+            opts.API.calcNextSlide();
+            opts.API.updateView();
         } else {
-            opts.API.queueTransition( opts, slideOpts );
+            opts.API.queueTransition( slideOpts );
         }
     },
 
     // perform the actual animation
-    doTransition: function(opts, currEl, nextEl, fwd, callback) {
+    doTransition: function( slideOpts, currEl, nextEl, fwd, callback) {
+        var opts = slideOpts;
         var curr = $(currEl), next = $(nextEl);
         var fn = function() {
-            next.animate(opts.animIn || {}, opts.speed, opts.easeIn || opts.easing, callback);
+            // make sure animIn has something so that callback doesn't trigger immediately
+            next.animate(opts.animIn || { opacity: 1}, opts.speed, opts.easeIn || opts.easing, callback);
         };
 
         next.css(opts.cssBefore || {});
@@ -303,23 +394,49 @@ $.fn.cycle.API = {
         }
     },
 
-    queueTransition: function(opts, slideOpts) {
+    queueTransition: function( slideOpts, specificTimeout ) {
+        var opts = this.opts();
+        var timeout = specificTimeout !== undefined ? specificTimeout : slideOpts.timeout;
         if (opts.nextSlide === 0 && --opts.loop === 0) {
             opts.API.log('terminating; loop=0');
             opts.timeout = 0;
-            opts.API.trigger('cycle-finished', [ opts ]);
+            if ( timeout ) {
+                setTimeout(function() {
+                    opts.API.trigger('cycle-finished', [ opts ]);
+                }, timeout);
+            }
+            else {
+                opts.API.trigger('cycle-finished', [ opts ]);
+            }
             // reset nextSlide
             opts.nextSlide = opts.currSlide;
             return;
         }
-        if (slideOpts.timeout) {
-            opts.timeoutId = setTimeout(function() { 
-                opts.API.prepareTx( opts, false, !opts.reverse ); 
-            }, slideOpts.timeout );
+        if ( opts.continueAuto !== undefined ) {
+            if ( opts.continueAuto === false || 
+                ($.isFunction(opts.continueAuto) && opts.continueAuto() === false )) {
+                opts.API.log('terminating automatic transitions');
+                opts.timeout = 0;
+                if ( opts.timeoutId )
+                    clearTimeout(opts.timeoutId);
+                return;
+            }
+        }
+        if ( timeout ) {
+            opts._lastQueue = $.now();
+            if ( specificTimeout === undefined )
+                opts._remainingTimeout = slideOpts.timeout;
+
+            if ( !opts.paused && ! opts.hoverPaused ) {
+                opts.timeoutId = setTimeout(function() { 
+                    opts.API.prepareTx( false, !opts.reverse ); 
+                }, timeout );
+            }
         }
     },
 
-    stopTransition: function( opts ) {
+    stopTransition: function() {
+        var opts = this.opts();
         if ( opts.slides.filter(':animated').length ) {
             opts.slides.stop(false, true);
             opts.API.trigger('cycle-transition-stopped', [ opts ]);
@@ -330,7 +447,8 @@ $.fn.cycle.API = {
     },
 
     // advance slide forward or back
-    advanceSlide: function( opts, val ) {
+    advanceSlide: function( val ) {
+        var opts = this.opts();
         clearTimeout(opts.timeoutId);
         opts.timeoutId = 0;
         opts.nextSlide = opts.currSlide + val;
@@ -340,11 +458,12 @@ $.fn.cycle.API = {
         else if (opts.nextSlide >= opts.slides.length)
             opts.nextSlide = 0;
 
-        opts.API.prepareTx( opts, true,  val >= 0 );
+        opts.API.prepareTx( true,  val >= 0 );
         return false;
     },
 
-    buildSlideOpts: function( opts, slide ) {
+    buildSlideOpts: function( slide ) {
+        var opts = this.opts();
         var val, shortName;
         var slideOpts = slide.data() || {};
         for (var p in slideOpts) {
@@ -352,7 +471,7 @@ $.fn.cycle.API = {
             if (slideOpts.hasOwnProperty(p) && /^cycle[A-Z]+/.test(p) ) {
                 val = slideOpts[p];
                 shortName = p.match(/^cycle(.*)/)[1].replace(/^[A-Z]/, lowerCase);
-                log('['+(opts.slideCount-1)+']', shortName+':', val, '('+typeof val +')');
+                opts.API.log('['+(opts.slideCount-1)+']', shortName+':', val, '('+typeof val +')');
                 slideOpts[shortName] = val;
             }
         }
@@ -373,7 +492,8 @@ $.fn.cycle.API = {
         return slideOpts;
     },
 
-    getSlideOpts: function( opts, index ) {
+    getSlideOpts: function( index ) {
+        var opts = this.opts();
         if ( index === undefined )
             index = opts.currSlide;
 
@@ -382,7 +502,8 @@ $.fn.cycle.API = {
         return $.extend( {}, opts, slideOpts );
     },
     
-    initSlide: function( opts, slideOpts, slide, suggestedZindex ) {
+    initSlide: function( slideOpts, slide, suggestedZindex ) {
+        var opts = this.opts();
         slide.css( slideOpts.slideCss || {} );
         if ( suggestedZindex > 0 )
             slide.css( 'zIndex', suggestedZindex );
@@ -392,27 +513,50 @@ $.fn.cycle.API = {
             slideOpts.speed = $.fx.speeds[slideOpts.speed] || $.fx.speeds._default;
         if ( !slideOpts.sync )
             slideOpts.speed = slideOpts.speed / 2;
+
+        slide.addClass( opts.slideClass );
     },
 
-    updateView: function( opts ) {
+    updateView: function( isAfter, isDuring, forceEvent ) {
+        var opts = this.opts();
         if ( !opts._initialized )
             return;
-        var slideOpts = opts.API.getSlideOpts( opts );
+        var slideOpts = opts.API.getSlideOpts();
         var currSlide = opts.slides[ opts.currSlide ];
+
+        if ( ! isAfter && isDuring !== true ) {
+            opts.API.trigger('cycle-update-view-before', [ opts, slideOpts, currSlide ]);
+            if ( opts.updateView < 0 )
+                return;
+        }
 
         if ( opts.slideActiveClass ) {
             opts.slides.removeClass( opts.slideActiveClass )
                 .eq( opts.currSlide ).addClass( opts.slideActiveClass );
         }
 
-        opts.API.trigger('cycle-update-view', [ opts, slideOpts, currSlide ]);
+        if ( isAfter && opts.hideNonActive )
+            opts.slides.filter( ':not(.' + opts.slideActiveClass + ')' ).css('visibility', 'hidden');
+
+        if ( opts.updateView === 0 ) {
+            setTimeout(function() {
+                opts.API.trigger('cycle-update-view', [ opts, slideOpts, currSlide, isAfter ]);
+            }, slideOpts.speed / (opts.sync ? 2 : 1) );
+        }
+
+        if ( opts.updateView !== 0 )
+            opts.API.trigger('cycle-update-view', [ opts, slideOpts, currSlide, isAfter ]);
+        
+        if ( isAfter )
+            opts.API.trigger('cycle-update-view-after', [ opts, slideOpts, currSlide ]);
     },
 
-    getComponent: function( opts, name ) {
+    getComponent: function( name ) {
+        var opts = this.opts();
         var selector = opts[name];
         if (typeof selector === 'string') {
-            // if selector is a child selector then use find, otherwise query full dom
-            return (/^\s*\>/).test( selector ) ? opts.container.find( selector ) : $( selector );
+            // if selector is a child, sibling combinator, adjancent selector then use find, otherwise query full dom
+            return (/^\s*[\>|\+|~]/).test( selector ) ? opts.container.find( selector ) : $( selector );
         }
         if (selector.jquery)
             return selector;
@@ -420,7 +564,8 @@ $.fn.cycle.API = {
         return $(selector);
     },
 
-    stackSlides: function( opts, curr, next, fwd ) {
+    stackSlides: function( curr, next, fwd ) {
+        var opts = this.opts();
         if ( !curr ) {
             curr = opts.slides[opts.currSlide];
             next = opts.slides[opts.nextSlide];
@@ -448,26 +593,25 @@ $.fn.cycle.API = {
         }
 
         $(next).css('zIndex', opts.maxZ - 1);
+    },
+
+    getSlideIndex: function( el ) {
+        return this.opts().slides.index( el );
     }
 
 }; // API
 
-// expose default logger
-$.fn.cycle.log = log;
-
-// automatically find and run slideshows
-$(document).ready(function() {
-    $( $.fn.cycle.defaults.autoSelector ).cycle();
-});
+// default logger
+$.fn.cycle.log = function log() {
+    /*global console:true */
+    if (window.console && console.log)
+        console.log('[cycle2] ' + Array.prototype.join.call(arguments, ' ') );
+};
 
 $.fn.cycle.version = function() { return 'Cycle2: ' + version; };
 
 // helper functions
-function log() {
-    /*global console:true */
-    if (window.console && console.log)
-        console.log('[cycle2] ' + Array.prototype.join.call(arguments, ' ') );
-}
+
 function lowerCase(s) {
     return (s || '').toLowerCase();
 }
@@ -478,35 +622,33 @@ $.fn.cycle.transitions = {
     },
     none: {
         before: function( opts, curr, next, fwd ) {
-            opts.API.stackSlides( opts, next, curr, fwd );
-            opts.cssBefore = { opacity: 1, display: 'block' };
+            opts.API.stackSlides( next, curr, fwd );
+            opts.cssBefore = { opacity: 1, visibility: 'visible', display: 'block' };
         }
     },
     fade: {
         before: function( opts, curr, next, fwd ) {
-            var css = opts.API.getSlideOpts( opts, opts.nextSlide ).slideCss || {};
-            opts.API.stackSlides( opts, curr, next, fwd );
-            opts.cssBefore = $.extend(css, { opacity: 0, display: 'block' });
-            opts.cssAfter = { display: 'none' };
+            var css = opts.API.getSlideOpts( opts.nextSlide ).slideCss || {};
+            opts.API.stackSlides( curr, next, fwd );
+            opts.cssBefore = $.extend(css, { opacity: 0, visibility: 'visible', display: 'block' });
             opts.animIn = { opacity: 1 };
             opts.animOut = { opacity: 0 };
         }
     },
     fadeout: {
         before: function( opts , curr, next, fwd ) {
-            var css = opts.API.getSlideOpts( opts, opts.nextSlide ).slideCss || {};
-            opts.API.stackSlides( opts, curr, next, fwd );
-            opts.cssBefore = $.extend(css, { opacity: 1, display: 'block' });
-            opts.cssAfter = { display: 'none' };
+            var css = opts.API.getSlideOpts( opts.nextSlide ).slideCss || {};
+            opts.API.stackSlides( curr, next, fwd );
+            opts.cssBefore = $.extend(css, { opacity: 1, visibility: 'visible', display: 'block' });
             opts.animOut = { opacity: 0 };
         }
     },
     scrollHorz: {
         before: function( opts, curr, next, fwd ) {
-            opts.API.stackSlides( opts, curr, next, fwd );
+            opts.API.stackSlides( curr, next, fwd );
             var w = opts.container.css('overflow','hidden').width();
-            opts.cssBefore = { left: fwd ? w : - w, top: 0, opacity: 1, display: 'block' };
-            opts.cssAfter = { display: 'none' };
+            opts.cssBefore = { left: fwd ? w : - w, top: 0, opacity: 1, visibility: 'visible', display: 'block' };
+            opts.cssAfter = { zIndex: opts._maxZ - 2, left: 0 };
             opts.animIn = { left: 0 };
             opts.animOut = { left: fwd ? -w : w };
         }
@@ -516,71 +658,169 @@ $.fn.cycle.transitions = {
 // @see: http://jquery.malsup.com/cycle2/api
 $.fn.cycle.defaults = {
     allowWrap:        true,
-    autoSelector:     '.cycle-slideshow',
+    autoSelector:     '.cycle-slideshow[data-cycle-auto-init!=false]',
     delay:            0,
     easing:           null,
     fx:              'fade',
+    hideNonActive:    true,
     loop:             0,
     manualFx:         undefined,
     manualSpeed:      undefined,
+    manualTrump:      true,
     maxZ:             100,
     pauseOnHover:     false,
     reverse:          false,
     slideActiveClass: 'cycle-slide-active',
+    slideClass:       'cycle-slide',
     slideCss:         { position: 'absolute', top: 0, left: 0 },
     slides:          '> img',
     speed:            500,
     startingSlide:    0,
     sync:             true,
-    timeout:          4000
+    timeout:          4000,
+    updateView:       0
 };
+
+// automatically find and run slideshows
+$(document).ready(function() {
+    $( $.fn.cycle.defaults.autoSelector ).cycle();
+});
 
 })(jQuery);
 
-/*! Cycle2 autoheight plugin; Copyright (c) M.Alsup, 2012; version: BETA-1 */
+/*! Cycle2 autoheight plugin; Copyright (c) M.Alsup, 2012; version: 20130913 */
 (function($) {
 "use strict";
 
 $.extend($.fn.cycle.defaults, {
-    autoHeight: 0
+    autoHeight: 0, // setting this option to false disables autoHeight logic
+    autoHeightSpeed: 250,
+    autoHeightEasing: null
 });    
 
-$(document).on( 'cycle-initialized', function( e, opts, slideOpts, currSlide ) {
+$(document).on( 'cycle-initialized', function( e, opts ) {
+    var autoHeight = opts.autoHeight;
+    var t = $.type( autoHeight );
+    var resizeThrottle = null;
     var ratio;
-    if ( $.type( opts.autoHeight ) == 'number' && opts.autoHeight >= 0 ) {
-        // use existing slide
-        opts._sentinel = $( opts.slides[opts.autoHeight] ).clone().css({
+
+    if ( t !== 'string' && t !== 'number' )
+        return;
+
+    // bind events
+    opts.container.on( 'cycle-slide-added cycle-slide-removed', initAutoHeight );
+    opts.container.on( 'cycle-destroyed', onDestroy );
+
+    if ( autoHeight == 'container' ) {
+        opts.container.on( 'cycle-before', onBefore );
+    }
+    else if ( t === 'string' && /\d+\:\d+/.test( autoHeight ) ) { 
+        // use ratio
+        ratio = autoHeight.match(/(\d+)\:(\d+)/);
+        ratio = ratio[1] / ratio[2];
+        opts._autoHeightRatio = ratio;
+    }
+
+    // if autoHeight is a number then we don't need to recalculate the sentinel
+    // index on resize
+    if ( t !== 'number' ) {
+        // bind unique resize handler per slideshow (so it can be 'off-ed' in onDestroy)
+        opts._autoHeightOnResize = function () {
+            clearTimeout( resizeThrottle );
+            resizeThrottle = setTimeout( onResize, 50 );
+        };
+
+        $(window).on( 'resize orientationchange', opts._autoHeightOnResize );
+    }
+
+    setTimeout( onResize, 30 );
+
+    function onResize() {
+        initAutoHeight( e, opts );
+    }
+});
+
+function initAutoHeight( e, opts ) {
+    var clone, height, sentinelIndex;
+    var autoHeight = opts.autoHeight;
+
+    if ( autoHeight == 'container' ) {
+        height = $( opts.slides[ opts.currSlide ] ).outerHeight();
+        opts.container.height( height );
+    }
+    else if ( opts._autoHeightRatio ) { 
+        opts.container.height( opts.container.width() / opts._autoHeightRatio );
+    }
+    else if ( autoHeight === 'calc' || ( $.type( autoHeight ) == 'number' && autoHeight >= 0 ) ) {
+        if ( autoHeight === 'calc' )
+            sentinelIndex = calcSentinelIndex( e, opts );
+        else if ( autoHeight >= opts.slides.length )
+            sentinelIndex = 0;
+        else 
+            sentinelIndex = autoHeight;
+
+        // only recreate sentinel if index is different
+        if ( sentinelIndex == opts._sentinelIndex )
+            return;
+
+        opts._sentinelIndex = sentinelIndex;
+        if ( opts._sentinel )
+            opts._sentinel.remove();
+
+        // clone existing slide as sentinel
+        clone = $( opts.slides[ sentinelIndex ].cloneNode(true) );
+        
+        // #50; remove special attributes from cloned content
+        clone.removeAttr( 'id name rel' ).find( '[id],[name],[rel]' ).removeAttr( 'id name rel' );
+
+        clone.css({
             position: 'static',
             visibility: 'hidden',
             display: 'block'
-        }).prependTo( opts.container ).removeClass().addClass('cycle-sentinel');
-    }
-    else if ( $.type( opts.autoHeight ) == 'string' && /\d+\:\d+/.test( opts.autoHeight ) ) { 
-        // use ratio
-        ratio = opts.autoHeight.match(/(\d+)\:(\d+)/);
-        ratio = ratio[1] / ratio[2];
-        $(window).on( 'resize', onResize );
-        opts._autoHeightOnResize = onResize;
-        setTimeout(function() {
-            $(window).triggerHandler('resize');
-        },15);
-    }
+        }).prependTo( opts.container ).addClass('cycle-sentinel cycle-slide').removeClass('cycle-slide-active');
+        clone.find( '*' ).css( 'visibility', 'hidden' );
 
-    function onResize() {
-        opts.container.height( opts.container.width() / ratio );
+        opts._sentinel = clone;
     }
-});
+}    
 
-$(document).on( 'cycle-destroyed', function( e, opts ) {
-    if ( opts._sentinel )
+function calcSentinelIndex( e, opts ) {
+    var index = 0, max = -1;
+
+    // calculate tallest slide index
+    opts.slides.each(function(i) {
+        var h = $(this).height();
+        if ( h > max ) {
+            max = h;
+            index = i;
+        }
+    });
+    return index;
+}
+
+function onBefore( e, opts, outgoing, incoming, forward ) {
+    var h = $(incoming).outerHeight();
+    opts.container.animate( { height: h }, opts.autoHeightSpeed, opts.autoHeightEasing );
+}
+
+function onDestroy( e, opts ) {
+    if ( opts._autoHeightOnResize ) {
+        $(window).off( 'resize orientationchange', opts._autoHeightOnResize );
+        opts._autoHeightOnResize = null;
+    }
+    opts.container.off( 'cycle-slide-added cycle-slide-removed', initAutoHeight );
+    opts.container.off( 'cycle-destroyed', onDestroy );
+    opts.container.off( 'cycle-before', onBefore );
+
+    if ( opts._sentinel ) {
         opts._sentinel.remove();
-    if ( opts._autoHeightOnResize )
-        $(window).off( 'resize', opts._autoHeightOnResize );
-});
+        opts._sentinel = null;
+    }
+}
 
 })(jQuery);
 
-/*! caption plugin for Cycle2;  version: BETA-1 */
+/*! caption plugin for Cycle2;  version: 20130306 */
 (function($) {
 "use strict";
 
@@ -588,16 +828,24 @@ $.extend($.fn.cycle.defaults, {
     caption:          '> .cycle-caption',
     captionTemplate:  '{{slideNum}} / {{slideCount}}',
     overlay:          '> .cycle-overlay',
-    overlayTemplate:  '<div>{{title}}</div><div>{{desc}}</div>'
+    overlayTemplate:  '<div>{{title}}</div><div>{{desc}}</div>',
+    captionModule:    'caption'
 });    
 
 $(document).on( 'cycle-update-view', function( e, opts, slideOpts, currSlide ) {
+    if ( opts.captionModule !== 'caption' )
+        return;
     var el;
     $.each(['caption','overlay'], function() {
-        var name = this, template = slideOpts[name+'Template'];
-        if( opts[name] && template ) {
-            el = opts.API.getComponent( opts, name );
-            el.html( opts.API.tmpl( template, slideOpts, currSlide ) );
+        var name = this; 
+        var template = slideOpts[name+'Template'];
+        var el = opts.API.getComponent( name );
+        if( el.length && template ) {
+            el.html( opts.API.tmpl( template, slideOpts, opts, currSlide ) );
+            el.show();
+        }
+        else {
+            el.hide();
         }
     });
 });
@@ -607,7 +855,7 @@ $(document).on( 'cycle-destroyed', function( e, opts ) {
     $.each(['caption','overlay'], function() {
         var name = this, template = opts[name+'Template'];
         if ( opts[name] && template ) {
-            el = opts.API.getComponent( opts, 'caption' );
+            el = opts.API.getComponent( 'caption' );
             el.empty();
         }
     });
@@ -615,7 +863,7 @@ $(document).on( 'cycle-destroyed', function( e, opts ) {
 
 })(jQuery);
 
-/*! command plugin for Cycle2;  version: BETA-1 */
+/*! command plugin for Cycle2;  version: 20140415 */
 (function($) {
 "use strict";
 
@@ -640,12 +888,12 @@ $.fn.cycle = function( options ) {
                 return;
             }
             else {
+                cmd = cmd == 'goto' ? 'jump' : cmd; // issue #3; change 'goto' to 'jump' internally
                 cmdFn = opts.API[ cmd ];
                 if ( $.isFunction( cmdFn )) {
                     cmdArgs = $.makeArray( args );
                     cmdArgs.shift();
-                    cmdArgs.unshift( opts );
-                    return cmdFn.apply( opts, cmdArgs );
+                    return cmdFn.apply( opts.API, cmdArgs );
                 }
                 else {
                     c2.log( 'unknown command: ', cmd );
@@ -660,19 +908,66 @@ $.fn.cycle = function( options ) {
 
 // copy props
 $.extend( $.fn.cycle, c2 );
-
+console.log("test:");
 $.extend( c2.API, {
-    
-    destroy: function(opts) {
-        clearTimeout(opts.timeoutId);
-        opts.timeoutId = 0;
-        opts.API.stop( opts );
-        opts.container.removeData( 'cycle.opts' );
-        opts.API.trigger( 'cycle-destroyed', [ opts ] ).log('cycle-destroyed');
+    next: function() {
+        var opts = this.opts();
+        if ( opts.busy && ! opts.manualTrump )
+            return;
+
+        var count = opts.reverse ? -1 : 1;
+        debugger;
+        if ( opts.allowWrap === false && ( opts.currSlide + count ) >= opts.slideCount )
+            return;
+
+        opts.API.advanceSlide( count );
+        opts.API.trigger('cycle-next', [ opts ]).log('cycle-next');
     },
 
-    goto: function( opts, index ) {
+    prev: function() {
+        var opts = this.opts();
+        if ( opts.busy && ! opts.manualTrump )
+            return;
+        var count = opts.reverse ? 1 : -1;
+        if ( opts.allowWrap === false && ( opts.currSlide + count ) < 0 )
+            return;
+
+        opts.API.advanceSlide( count );
+        opts.API.trigger('cycle-prev', [ opts ]).log('cycle-prev');
+    },
+
+    destroy: function() {
+        this.stop(); //#204
+
+        var opts = this.opts();
+        var clean = $.isFunction( $._data ) ? $._data : $.noop;  // hack for #184 and #201
+        clearTimeout(opts.timeoutId);
+        opts.timeoutId = 0;
+        opts.API.stop();
+        opts.API.trigger( 'cycle-destroyed', [ opts ] ).log('cycle-destroyed');
+        opts.container.removeData();
+        clean( opts.container[0], 'parsedAttrs', false );
+
+        // #75; remove inline styles
+        if ( ! opts.retainStylesOnDestroy ) {
+            opts.container.removeAttr( 'style' );
+            opts.slides.removeAttr( 'style' );
+            opts.slides.removeClass( opts.slideActiveClass );
+        }
+        opts.slides.each(function() {
+            var slide = $(this);
+            slide.removeData();
+            slide.removeClass( opts.slideClass );
+            clean( this, 'parsedAttrs', false );
+        });
+    },
+
+    jump: function( index, fx ) {
         // go to the requested slide
+        var fwd;
+        var opts = this.opts();
+        if ( opts.busy && ! opts.manualTrump )
+            return;
         var num = parseInt( index, 10 );
         if (isNaN(num) || num < 0 || num >= opts.slides.length) {
             opts.API.log('goto: invalid slide index: ' + num);
@@ -686,32 +981,33 @@ $.extend( c2.API, {
         clearTimeout(opts.timeoutId);
         opts.timeoutId = 0;
         opts.API.log('goto: ', num, ' (zero-index)');
-        opts.API.prepareTx(opts, true, !opts.reverse);
+        fwd = opts.currSlide < opts.nextSlide;
+        opts._tempFx = fx;
+        opts.API.prepareTx( true, fwd );
     },
 
-    stop: function( opts ) {
+    stop: function() {
+        var opts = this.opts();
+        var pauseObj = opts.container;
         clearTimeout(opts.timeoutId);
         opts.timeoutId = 0;
-        opts.API.stopTransition( opts );
+        opts.API.stopTransition();
+        if ( opts.pauseOnHover ) {
+            if ( opts.pauseOnHover !== true )
+                pauseObj = $( opts.pauseOnHover );
+            pauseObj.off('mouseenter mouseleave');
+        }
         opts.API.trigger('cycle-stopped', [ opts ]).log('cycle-stopped');
     },
 
-    pause: function(opts) {
-        opts.paused = true;
-        opts.API.trigger('cycle-paused', [ opts ]).log('cycle-paused');
-    },
-
-    resume: function(opts) {
-        opts.paused = false;
-        opts.API.trigger('cycle-resumed', [ opts ]).log('cycle-resumed');
-    },
-
-    reinit: function( opts ) {
-        opts.API.destroy( opts );
+    reinit: function() {
+        var opts = this.opts();
+        opts.API.destroy();
         opts.container.cycle();
     },
 
-    remove: function( opts, index ) {
+    remove: function( index ) {
+        var opts = this.opts();
         var slide, slideToRemove, slides = [], slideNum = 1;
         for ( var i=0; i < opts.slides.length; i++ ) {
             slide = opts.slides[i];
@@ -720,7 +1016,7 @@ $.extend( c2.API, {
             }
             else {
                 slides.push( slide );
-                slide.data('cycle.opts').slideNum = slideNum;
+                $( slide ).data('cycle.opts').slideNum = slideNum;
                 slideNum++;
             }
         }
@@ -728,12 +1024,15 @@ $.extend( c2.API, {
             opts.slides = $( slides );
             opts.slideCount--;
             $( slideToRemove ).remove();
-            if (index == opts.currSlide) {
-                opts.API.advanceSlide( opts, 1 );
-            }
+            if (index == opts.currSlide)
+                opts.API.advanceSlide( 1 );
+            else if ( index < opts.currSlide )
+                opts.currSlide--;
+            else
+                opts.currSlide++;
 
             opts.API.trigger('cycle-slide-removed', [ opts, index, slideToRemove ]).log('cycle-slide-removed');
-            opts.API.updateView( opts );
+            opts.API.updateView();
         }
     }
 
@@ -752,7 +1051,7 @@ $(document).on('click.cycle', '[data-cycle-cmd]', function(e) {
 
 })(jQuery);
 
-/*! hash plugin for Cycle2;  version: BETA-1 */
+/*! hash plugin for Cycle2;  version: 20130905 */
 (function($) {
 "use strict";
 
@@ -767,8 +1066,10 @@ $(document).on( 'cycle-pre-initialize', function( e, opts ) {
 });
 
 $(document).on( 'cycle-update-view', function( e, opts, slideOpts ) {
-    if ( slideOpts.hash )
+    if ( slideOpts.hash && ( '#' + slideOpts.hash ) != window.location.hash ) {
+        opts._hashFence = true;
         window.location.hash = slideOpts.hash;
+    }
 });
 
 $(document).on( 'cycle-destroyed', function( e, opts) {
@@ -778,16 +1079,23 @@ $(document).on( 'cycle-destroyed', function( e, opts) {
 });
 
 function onHashChange( opts, setStartingSlide ) {
-    var hash = window.location.hash.substring(1);
+    var hash;
+    if ( opts._hashFence ) {
+        opts._hashFence = false;
+        return;
+    }
+    
+    hash = window.location.hash.substring(1);
 
     opts.slides.each(function(i) {
-        if ( $(this).data( 'cycle-hash' ) === hash ) {
+        if ( $(this).data( 'cycle-hash' ) == hash ) {
             if ( setStartingSlide === true ) {
                 opts.startingSlide = i;
             }
             else {
+                var fwd = opts.currSlide < i;
                 opts.nextSlide = i;
-                opts.API.prepareTx( opts, true, false );
+                opts.API.prepareTx( true, fwd );
             }
             return false;
         }
@@ -796,7 +1104,7 @@ function onHashChange( opts, setStartingSlide ) {
 
 })(jQuery);
 
-/*! loader plugin for Cycle2;  version: BETA-1.1 */
+/*! loader plugin for Cycle2;  version: 20131121 */
 (function($) {
 "use strict";
 
@@ -814,16 +1122,28 @@ $(document).on( 'cycle-bootstrap', function( e, opts ) {
     addFn = opts.API.add;
     opts.API.add = add;
 
-    function add( opts, slides, prepend ) {
+    function add( slides, prepend ) {
         var slideArr = [];
+        if ( $.type( slides ) == 'string' )
+            slides = $.trim( slides );
+        else if ( $.type( slides) === 'array' ) {
+            for (var i=0; i < slides.length; i++ )
+                slides[i] = $(slides[i])[0];
+        }
+
         slides = $( slides );
         var slideCount = slides.length;
 
-        slides.hide().each(function() {
+        if ( ! slideCount )
+            return;
+
+        slides.css('visibility','hidden').appendTo('body').each(function(i) { // appendTo fixes #56
             var count = 0;
             var slide = $(this);
             var images = slide.is('img') ? slide : slide.find('img');
-            images = images.filter(':not(.cycle-loader-ignore)'); // allow some images to be marked as unimportant
+            slide.data('index', i);
+            // allow some images to be marked as unimportant (and filter out images w/o src value)
+            images = images.filter(':not(.cycle-loader-ignore)').filter(':not([src=""])');
             if ( ! images.length ) {
                 --slideCount;
                 slideArr.push( slide );
@@ -839,12 +1159,12 @@ $(document).on( 'cycle-bootstrap', function( e, opts ) {
                 else {
                     $(this).load(function() {
                         imageLoaded();
-                    }).error(function() {
+                    }).on("error", function() {
                         if ( --count === 0 ) {
                             // ignore this slide
                             opts.API.log('slide skipped; img not loaded:', this.src);
                             if ( --slideCount === 0 && opts.loader == 'wait') {
-                                addFn.apply( opts, [ opts, slideArr, prepend ] );
+                                addFn.apply( opts.API, [ slideArr, prepend ] );
                             }
                         }
                     });
@@ -864,24 +1184,33 @@ $(document).on( 'cycle-bootstrap', function( e, opts ) {
         
 
         function addSlide( slide ) {
+            var curr;
             if ( opts.loader == 'wait' ) {
                 slideArr.push( slide );
                 if ( slideCount === 0 ) {
-                    addFn.apply( opts, [ opts, slideArr, prepend ] );
+                    // #59; sort slides into original markup order
+                    slideArr.sort( sorter );
+                    addFn.apply( opts.API, [ slideArr, prepend ] );
                     opts.container.removeClass('cycle-loading');
                 }
             }
             else {
-                addFn.apply( opts, [ opts, slide, prepend ] );
+                curr = $(opts.slides[opts.currSlide]);
+                addFn.apply( opts.API, [ slide, prepend ] );
+                curr.show();
                 opts.container.removeClass('cycle-loading');
             }
+        }
+
+        function sorter(a, b) {
+            return a.data('index') - b.data('index');
         }
     }
 });
 
 })(jQuery);
 
-/*! pager plugin for Cycle2;  version: BETA-1 */
+/*! pager plugin for Cycle2;  version: 20140415 */
 (function($) {
 "use strict";
 
@@ -889,8 +1218,9 @@ $.extend($.fn.cycle.defaults, {
     pager:            '> .cycle-pager',
     pagerActiveClass: 'cycle-pager-active',
     pagerEvent:       'click.cycle',
+    pagerEventBubble: undefined,
     pagerTemplate:    '<span>&bull;</span>'
-});    
+});
 
 $(document).on( 'cycle-bootstrap', function( e, opts, API ) {
     // add method to API
@@ -906,7 +1236,7 @@ $(document).on( 'cycle-slide-added', function( e, opts, slideOpts, slideAdded ) 
 
 $(document).on( 'cycle-slide-removed', function( e, opts, index, slideRemoved ) {
     if ( opts.pager ) {
-        var pagers = opts.API.getComponent( opts, 'pager' );
+        var pagers = opts.API.getComponent( 'pager' );
         pagers.each(function() {
             var pager = $(this);
             $( pager.children()[index] ).remove();
@@ -918,7 +1248,7 @@ $(document).on( 'cycle-update-view', function( e, opts, slideOpts ) {
     var pagers;
 
     if ( opts.pager ) {
-        pagers = opts.API.getComponent( opts, 'pager' );
+        pagers = opts.API.getComponent( 'pager' );
         pagers.each(function() {
            $(this).children().removeClass( opts.pagerActiveClass )
             .eq( opts.currSlide ).addClass( opts.pagerActiveClass );
@@ -927,33 +1257,41 @@ $(document).on( 'cycle-update-view', function( e, opts, slideOpts ) {
 });
 
 $(document).on( 'cycle-destroyed', function( e, opts ) {
-    var pagers;
-    if (opts.pager && opts.pagerTemplate) {
-        pagers = opts.API.getComponent( opts, 'pager' );
-        pagers.empty();
+    var pager = opts.API.getComponent( 'pager' );
+
+    if ( pager ) {
+        pager.children().off( opts.pagerEvent ); // #202
+        if ( opts.pagerTemplate )
+            pager.empty();
     }
 });
 
 function buildPagerLink( opts, slideOpts, slide ) {
     var pagerLink;
-    var pagers = opts.API.getComponent( opts, 'pager' );
+    var pagers = opts.API.getComponent( 'pager' );
     pagers.each(function() {
         var pager = $(this);
         if ( slideOpts.pagerTemplate ) {
-            var markup = opts.API.tmpl( slideOpts.pagerTemplate, slideOpts, slide[0] );
+            var markup = opts.API.tmpl( slideOpts.pagerTemplate, slideOpts, opts, slide[0] );
             pagerLink = $( markup ).appendTo( pager );
         }
         else {
             pagerLink = pager.children().eq( opts.slideCount - 1 );
         }
         pagerLink.on( opts.pagerEvent, function(e) {
-            e.preventDefault();
-            opts.API.page(opts, pager, e.currentTarget);
+            if ( ! opts.pagerEventBubble )
+                e.preventDefault();
+            opts.API.page( pager, e.currentTarget);
         });
     });
 }
 
-function page( opts, pager, target ) {
+function page( pager, target ) {
+    /*jshint validthis:true */
+    var opts = this.opts();
+    if ( opts.busy && ! opts.manualTrump )
+        return;
+
     var index = pager.children().index( target );
     var nextSlide = index;
     var fwd = opts.currSlide < nextSlide;
@@ -961,14 +1299,14 @@ function page( opts, pager, target ) {
         return; // no op, clicked pager for the currently displayed slide
     }
     opts.nextSlide = nextSlide;
-    opts.API.prepareTx( opts, true, fwd );
+    opts._tempFx = opts.pagerFx;
+    opts.API.prepareTx( true, fwd );
     opts.API.trigger('cycle-pager-activated', [opts, pager, target ]);
 }
 
 })(jQuery);
 
-
-/*! prevnext plugin for Cycle2;  version: BETA-1 */
+/*! prevnext plugin for Cycle2;  version: 20140408 */
 (function($) {
 "use strict";
 
@@ -978,48 +1316,30 @@ $.extend($.fn.cycle.defaults, {
     disabledClass:  'disabled',
     prev:           '> .cycle-prev',
     prevEvent:      'click.cycle',
-    swipe:          true
-});    
-
-
-$(document).on( 'cycle-bootstrap', function( e, opts, API ) {
-    // add methods to API
-    API.next = function( opts ) {
-        var count = opts.reverse ? -1 : 1;
-        if ( opts.allowWrap === false && ( opts.currSlide + count ) >= opts.slideCount )
-            return;
-
-        opts.API.advanceSlide( opts, count );
-        opts.API.trigger('cycle-next', [ opts ]).log('cycle-next');
-    };
-
-    API.prev = function( opts ) {
-        var count = opts.reverse ? 1 : -1;
-        if ( opts.allowWrap === false && ( opts.currSlide + count ) < 0 )
-            return;
-
-        opts.API.advanceSlide( opts, count );
-        opts.API.trigger('cycle-prev', [ opts ]).log('cycle-prev');
-    };
+    swipe:          false
 });
 
 $(document).on( 'cycle-initialized', function( e, opts ) {
-    opts.API.getComponent( opts, 'next' ).off( opts.nextEvent ).on( opts.nextEvent, function(e) {
+    opts.API.getComponent( 'next' ).on( opts.nextEvent, function(e) {
         e.preventDefault();
-        opts.API.next( opts );
+        opts.API.next();
     });
 
-    opts.API.getComponent( opts, 'prev' ).off( opts.prevEvent ).on( opts.prevEvent, function(e) {
+    opts.API.getComponent( 'prev' ).on( opts.prevEvent, function(e) {
         e.preventDefault();
-        opts.API.prev( opts );
+        opts.API.prev();
     });
 
     if ( opts.swipe ) {
-        opts.container.on( 'swipeleft.cycle', function() {
-            opts.API.next( opts );
+        var nextEvent = opts.swipeVert ? 'swipeUp.cycle' : 'swipeLeft.cycle swipeleft.cycle';
+        var prevEvent = opts.swipeVert ? 'swipeDown.cycle' : 'swipeRight.cycle swiperight.cycle';
+        opts.container.on( nextEvent, function(e) {
+            opts._tempFx = opts.swipeFx;
+            opts.API.next();
         });
-        opts.container.on( 'swiperight.cycle', function() {
-            opts.API.prev( opts );
+        opts.container.on( prevEvent, function() {
+            opts._tempFx = opts.swipeFx;
+            opts.API.prev();
         });
     }
 });
@@ -1029,10 +1349,10 @@ $(document).on( 'cycle-update-view', function( e, opts, slideOpts, currSlide ) {
         return;
 
     var cls = opts.disabledClass;
-    var next = opts.API.getComponent( opts, 'next' );
-    var prev = opts.API.getComponent( opts, 'prev' );
+    var next = opts.API.getComponent( 'next' );
+    var prev = opts.API.getComponent( 'prev' );
     var prevBoundry = opts._prevBoundry || 0;
-    var nextBoundry = opts._nextBoundry || opts.slideCount - 1;
+    var nextBoundry = (opts._nextBoundry !== undefined)?opts._nextBoundry:opts.slideCount - 1;
 
     if ( opts.currSlide == nextBoundry )
         next.addClass( cls ).prop( 'disabled', true );
@@ -1047,14 +1367,14 @@ $(document).on( 'cycle-update-view', function( e, opts, slideOpts, currSlide ) {
 
 
 $(document).on( 'cycle-destroyed', function( e, opts ) {
-    $( opts.next ).off( opts.nextEvent );
-    $( opts.prev ).off( opts.prevEvent );
-    opts.container.off( 'swipeleft.cycle swiperight.cycle' );
+    opts.API.getComponent( 'prev' ).off( opts.nextEvent );
+    opts.API.getComponent( 'next' ).off( opts.prevEvent );
+    opts.container.off( 'swipeleft.cycle swiperight.cycle swipeLeft.cycle swipeRight.cycle swipeUp.cycle swipeDown.cycle' );
 });
 
 })(jQuery);
 
-/*! progressive loader plugin for Cycle2;  version: BETA-1 */
+/*! progressive loader plugin for Cycle2;  version: 20130315 */
 (function($) {
 "use strict";
 
@@ -1070,8 +1390,8 @@ $(document).on( 'cycle-pre-initialize', function( e, opts ) {
     var nextFn = API.next;
     var prevFn = API.prev;
     var prepareTxFn = API.prepareTx;
-    var slides;
     var type = $.type( opts.progressive );
+    var slides, scriptEl;
 
     if ( type == 'array' ) {
         slides = opts.progressive;
@@ -1080,24 +1400,38 @@ $(document).on( 'cycle-pre-initialize', function( e, opts ) {
         slides = opts.progressive( opts );
     }
     else if ( type == 'string' ) {
-        slides = $( opts.progressive ).html();
-        if ( ! $.trim( slides ) )
+        scriptEl = $( opts.progressive );
+        slides = $.trim( scriptEl.html() );
+        if ( !slides )
             return;
-        try {
-            slides = $.parseJSON( slides );
+        // is it json array?
+        if ( /^(\[)/.test( slides ) ) {
+            try {
+                slides = $.parseJSON( slides );
+            }
+            catch(err) {
+                API.log( 'error parsing progressive slides', err );
+                return;
+            }
         }
-        catch(err) {
-            API.log( 'error parsing progressive slides', err );
-            return;
+        else {
+            // plain text, split on delimeter
+            slides = slides.split( new RegExp( scriptEl.data('cycle-split') || '\n') );
+            
+            // #95; look for empty slide
+            if ( ! slides[ slides.length - 1 ] )
+                slides.pop();
         }
     }
 
+
+
     if ( prepareTxFn ) {
-        API.prepareTx = function( opts, manual, fwd ) {
+        API.prepareTx = function( manual, fwd ) {
             var index, slide;
 
             if ( manual || slides.length === 0 ) {
-                prepareTxFn.apply( opts, [ opts, manual, fwd ] );
+                prepareTxFn.apply( opts.API, [ manual, fwd ] );
                 return;
             }
 
@@ -1105,64 +1439,66 @@ $(document).on( 'cycle-pre-initialize', function( e, opts ) {
                 slide = slides[ 0 ];
                 slides = slides.slice( 1 );
                 opts.container.one('cycle-slide-added', function(e, opts ) {
-                    opts.API.advanceSlide( opts, 1 );
-                    // opts.container.removeClass('cycle-loading');
+                    setTimeout(function() {
+                        opts.API.advanceSlide( 1 );
+                    },50);
                 });
-                // opts.container.addClass('cycle-loading');
-                opts.API.add( opts, slide );
+                opts.API.add( slide );
             }
             else if ( !fwd && opts.currSlide === 0 ) {
                 index = slides.length-1;
                 slide = slides[ index ];
                 slides = slides.slice( 0, index );
                 opts.container.one('cycle-slide-added', function(e, opts ) {
-                    opts.currSlide = 1;
-                    opts.API.advanceSlide( opts, -1 );
-                    // opts.container.removeClass('cycle-loading');
+                    setTimeout(function() {
+                        opts.currSlide = 1;
+                        opts.API.advanceSlide( -1 );
+                    },50);
                 });
-                // opts.container.addClass('cycle-loading');
-                opts.API.add( opts, slide, true );
+                opts.API.add( slide, true );
             }
             else {
-                prepareTxFn.apply( opts, [ opts, manual, fwd ] );
+                prepareTxFn.apply( opts.API, [ manual, fwd ] );
             }
         };
     }
 
     if ( nextFn ) {
-        API.next = function( opts ) {
+        API.next = function() {
+            var opts = this.opts();
             if ( slides.length && opts.currSlide == ( opts.slideCount - 1 ) ) {
                 var slide = slides[ 0 ];
                 slides = slides.slice( 1 );
                 opts.container.one('cycle-slide-added', function(e, opts ) {
-                    nextFn.apply( opts, [ opts ] );
+                    nextFn.apply( opts.API );
                     opts.container.removeClass('cycle-loading');
                 });
                 opts.container.addClass('cycle-loading');
-                opts.API.add( opts, slide );
+                opts.API.add( slide );
             }
             else {
-                nextFn.apply( opts, [ opts ] );    
+                nextFn.apply( opts.API );    
             }
         };
     }
     
     if ( prevFn ) {
-        API.prev = function( opts ) {
+        API.prev = function() {
+            var opts = this.opts();
             if ( slides.length && opts.currSlide === 0 ) {
                 var index = slides.length-1;
                 var slide = slides[ index ];
                 slides = slides.slice( 0, index );
                 opts.container.one('cycle-slide-added', function(e, opts ) {
                     opts.currSlide = 1;
-                    opts.API.advanceSlide( opts, -1 );
+                    opts.API.advanceSlide( -1 );
                     opts.container.removeClass('cycle-loading');
                 });
                 opts.container.addClass('cycle-loading');
-                opts.API.add( opts, slide, true );
+                opts.API.add( slide, true );
             }
             else {
-                prevFn.apply( opts, [ opts ] );
+                prevFn.apply( opts.API );
             }
         };
     }
@@ -1170,34 +1506,42 @@ $(document).on( 'cycle-pre-initialize', function( e, opts ) {
 
 })(jQuery);
 
-/*! tmpl plugin for Cycle2;  version: BETA-1 */
+/*! tmpl plugin for Cycle2;  version: 20121227 */
 (function($) {
 "use strict";
 
+$.extend($.fn.cycle.defaults, {
+    tmplRegex: '{{((.)?.*?)}}'
+});
+
 $.extend($.fn.cycle.API, {
-    tmpl: function( str, opts, extra ) {
-        if (str && opts) {
-            return str.replace(/\{\{((\.)?.*?)\}\}/g, function(_, str) {
-                var i, prop, obj = opts, names = str.split('.');
+    tmpl: function( str, opts /*, ... */) {
+        var regex = new RegExp( opts.tmplRegex || $.fn.cycle.defaults.tmplRegex, 'g' );
+        var args = $.makeArray( arguments );
+        args.shift();
+        return str.replace(regex, function(_, str) {
+            var i, j, obj, prop, names = str.split('.');
+            for (i=0; i < args.length; i++) {
+                obj = args[i];
+                if ( ! obj )
+                    continue;
                 if (names.length > 1) {
-                   prop = opts;
-                   for (i=0; i < names.length; i++) {
-                      obj = prop;
-                      prop = prop[ names[i] ] || str;
-                   }
+                    prop = obj;
+                    for (j=0; j < names.length; j++) {
+                        obj = prop;
+                        prop = prop[ names[j] ] || str;
+                    }
                 } else {
-                    prop = opts[str];
+                    prop = obj[str];
                 }
 
                 if ($.isFunction(prop))
-                   return prop.call(obj, opts);
-                if (prop !== undefined && prop !== null)
+                    return prop.apply(obj, args);
+                if (prop !== undefined && prop !== null && prop != str)
                     return prop;
-                if (extra && extra[ str ] !== undefined)
-                    return extra[ str ];
-                return str;
-            });
-        }
+            }
+            return str;
+        });
     }
 });    
 

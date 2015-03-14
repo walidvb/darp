@@ -178,6 +178,7 @@ $margin: 10px;
 			@media #{$tablet}
 			{
 				max-width:	calc(100% - #{2 * $slide-padding});
+				min-width:	calc(100% - #{2 * $slide-padding});
 				margin: auto;
 			}
 		}

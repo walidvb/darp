@@ -73,6 +73,16 @@ $sortable['status'] = $fields['field_status']->content;
  						</div>
  					</div>
  				</div>
+ 			<?php elseif ($nid == 120): ?>
+ 				<div class="proj-description text-slide slide">
+ 					<div class="text-slide-content">
+ 						<div class="proj-desc">
+ 							<div class="proj-desc-body">
+ 							<h1>Pellacani Romanens architectes</h1>
+ 							</div>
+ 						</div>
+ 					</div>
+ 				</div>
  			<?php endif; ?>
  			<?php if($body): ?>
  				<div class="proj-description text-slide slide">

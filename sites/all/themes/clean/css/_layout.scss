@@ -43,9 +43,15 @@ body.html{
 }
 
 #header{
+    .darp &{
+        opacity: 0;
+    }
+    transition: all 0.3s ease-in-out;
     overflow: visible;
+    text-align: right;
     @media #{$mobile}
-    {
+    {   
+        text-align: left;
         position: fixed;
         top: 0;
         right: 0;
@@ -61,11 +67,11 @@ body.html{
             transform: translateX(0%);
         }
     }
-    .darp-menu-header, .pager[data-nid="117"] h2{
-        font-size: larger;
-    }
+    // .darp-menu-header, .pager[data-nid="117"] h2{
+    //     font-size: larger;
+    // }
     #darp-menu-header{
-        margin-bottom: 1em;
+        margin-bottom: 0.3em;
     }
     .region-header
     {
@@ -78,7 +84,7 @@ body.html{
             left: auto;
             right: 15px;
         }
-        overflow: auto;
+        overflow: visible;
         position: absolute;
     }
     z-index: 149;
@@ -86,7 +92,7 @@ body.html{
     text-transform: uppercase;
 
     .view-header{
-        margin-bottom: 1em;
+        margin-bottom: 0.3em;
     }
     .pager{
         cursor: pointer;
@@ -95,9 +101,9 @@ body.html{
         &.active-proj, &:hover{
             color: black;
         }
-        &[data-nid="117"]{
-            margin-top: 1em;
-        }
+        // &[data-nid="117"]{
+        //     margin-top: 1em;
+        // }
         h2{
             font-size: 12px;
         }

@@ -161,7 +161,7 @@ $margin: 10px;
 	text-align: center;
 	&.proj-description{
 		.text-slide-content{
-			text-align: left;
+			text-align: justify;
 			@media #{$lg}
 			{
 				display: flex;
@@ -318,7 +318,7 @@ $margin: 10px;
 	
 	@media #{$mobile}
 	{
-		body.bios &, body.contact &{
+		body.bios &, body.contact &, .darp &{
 			&.nav-vert{
 				opacity: 0.5;
 			}
@@ -332,16 +332,25 @@ $margin: 10px;
 	}
 	&#up{
 		top:3px;
+		.darp &{
+			background-image: url("../img/arrow_black.png");
+			cursor: auto;
+		}
 	}
 
 	&#down{
 		bottom:3px;
-		transform: rotatez(-180deg)
+		transform: rotatez(-180deg);
+		.nothing-down &{
+			background-image: url("../img/arrow_black.png");
+			cursor: auto;
+		}
 	}
 	$arrow-padding: 120px;
 	&#left{
-		.nothing-left &, .bios &, .contact &{
-			opacity: 0.5;
+		.nothing-left &, .bios &, .contact &, .darp &{
+			background-image: url("../img/arrow_black.png");
+			cursor: auto;
 		}
 			left: 3px;
 		@media #{$tablet}
@@ -352,8 +361,9 @@ $margin: 10px;
 	}
 
 	&#right{
-		.nothing-right &, .bios &, .contact &{
-			opacity: 0.5;
+		.nothing-right &, .bios &, .contact &, .darp &{
+			background-image: url("../img/arrow_black.png");
+			cursor: auto;
 		}
 			right: 3px;
 		@media #{$tablet}

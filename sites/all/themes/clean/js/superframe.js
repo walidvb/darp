@@ -119,8 +119,13 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
     var nid = $(incoming).data('nid');
     $('.pager[data-nid=' + nid + ']').addClass('active-proj');
     var c = currFrame;
+    setTimeout(function(){c.cycle(0);}, 500);
   //update current project
-  currFrame = $('.proj-wrapper', incoming);
+    currFrame = $('.proj-wrapper', incoming);
+    if($('.slide',currFrame).length > 0)
+    {
+      $('body').removeClass('nothing-right');
+    }
     //replace the image
     clearTimeout(superTimeOut);
     clearTimeout(timeOut);
@@ -141,7 +146,13 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
         }
 
       }, 900);
-
+    if(optionHash.nextSlide == optionHash.slideCount - 1)
+    {
+      $('body').addClass('nothing-down');
+    }
+    else{
+     $('body').removeClass('nothing-down'); 
+    }
   }
   else //if miniframe
   {
@@ -168,6 +179,7 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
     else if(optionHash.nextSlide == optionHash.slideCount - 1)
     {
       $('body').addClass('nothing-right');
+      $('body').removeClass('nothing-left');
     }
     else{
       $('body').removeClass('nothing-left');
@@ -189,7 +201,7 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
        initialPageLoad = false;
        var initialSlide = optionHash.currSlide;
        $('.work-list-item').eq(initialSlide).addClass('active-proj');
-
+       $('body').addClass($(optionHash.slides[optionHash.currSlide]).attr('data-title'));
        currFrame = $('.proj-wrapper', optionHash.slides[optionHash.currSlide]);
        currFrame.replaceFirst().find('.img-loading:first, .img-loading:eq(1)').each(function(){$(this).replace()});
 
@@ -266,7 +278,9 @@ $(document).bind('cycle-after', function(event, optionHash, outgoingSlideEl, inc
     //bind arrows
     left.once('sfed', function(){$(this).on('click.nav', left_)});
     right.once('sfed', function(){$(this).on('click.nav', right_)});
-
+    $('#intro').click(function(){
+      down_();
+    });
     //bind mousewheel
     // $('.slide-image').on('mousewheel', wheelMove);
     // $(document, '.slide-image').on('mousewheel swipedown swipeup swiperight swipeleft', function(e){e.stopPropagation();})

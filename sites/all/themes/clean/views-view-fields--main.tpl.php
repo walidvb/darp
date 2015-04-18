@@ -45,7 +45,7 @@ $sortable['status'] = $fields['field_status']->content;
  */
  	$sortable['year'] = substr($fields['field_year']->content,0,4);
  	$sortable['nid'] = $nid;
- 	$sortable['cycle-hash'] = render_($nid);
+ 	$sortable['cycle-hash'] = render_($title);
  	$data = '';
  	foreach($sortable as $key => $value)
  	{
@@ -55,7 +55,7 @@ $sortable['status'] = $fields['field_status']->content;
  	?>
 
  	<div class="views-row miniframe" <?php print $data ?>>
- 		<div class="proj-wrapper"  data-id="<?php print $nid ?>" id="<?php print render_($title) ?>" >
+ 		<div class="proj-wrapper"  data-id="<?php print render_($title) ?>" id="<?php print render_($title) ?>" >
  			<?php if($type || $short || $thumbnail): ?>
  				<div class="proj-info text-slide slide">
  					<div class="text-slide-content">

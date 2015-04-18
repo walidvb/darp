@@ -7,7 +7,7 @@ include('includes/clean.functions.inc');
 include('includes/clean.preprocess.inc');
 
 function render_($string){
-	return strip_tags(drupal_clean_css_identifier($string, array(' & ' => '-', '&' => '-', ' ' => '-', '_' => '-', '/' => '-', '[' => '-', ']' => '')));
+	return strtolower(strip_tags(drupal_clean_css_identifier($string, array(' & ' => '-', '&' => '-', ' ' => '-', '_' => '-', '/' => '-', '[' => '-', ']' => ''))));
 }
 
 

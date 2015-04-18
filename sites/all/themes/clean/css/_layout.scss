@@ -43,16 +43,17 @@ body.html{
 }
 
 #header{
-    .darp &{
+    .intro &{
         opacity: 0;
     }
-    transition: all 0.3s ease-in-out;
+    
     overflow: visible;
     text-align: right;
     @media #{$mobile}
     {   
         text-align: left;
         position: fixed;
+        transition: transform 0.3s ease-in-out;
         top: 0;
         right: 0;
         left: 0;

@@ -1,7 +1,18 @@
 $slide-padding: 240px;
 $slide-padding-mobile: 35px;
 
-#contact, #intro{
+#intro .proj-desc{
+	background: url("../img/front.png");
+	color: transparent;
+}
+#darp .proj-description:first-child .proj-desc{
+	background: url("../img/back.png");
+	color: transparent;
+}
+#contact .proj-desc{
+	background: url("../img/darp_background.png");
+}
+#contact, #intro, #darp .proj-description:first-child{
 	.proj-desc{
 		position: absolute;
 		left: 0;
@@ -18,7 +29,6 @@ $slide-padding-mobile: 35px;
 			min-height: 250px;
 		}
 		margin: auto;
-		background: url("../img/darp_background.png");
 		background-position: center;
 		background-size: cover;
 		display: table;
@@ -318,7 +328,7 @@ $margin: 10px;
 	
 	@media #{$mobile}
 	{
-		body.bios &, body.contact &, .darp &{
+		body.bios &, body.contact &, .info &{
 			&.nav-vert{
 				opacity: 0.5;
 			}
@@ -332,7 +342,11 @@ $margin: 10px;
 	}
 	&#up{
 		top:3px;
-		.darp &{
+		.info &{
+			background-image: url("../img/arrow_black.png");
+			cursor: auto;
+		}
+		.nothing-down &{
 			background-image: url("../img/arrow_black.png");
 			cursor: auto;
 		}
@@ -348,7 +362,7 @@ $margin: 10px;
 	}
 	$arrow-padding: 120px;
 	&#left{
-		.nothing-left &, .bios &, .contact &, .darp &{
+		.nothing-left &, .contact &, .intro &{
 			background-image: url("../img/arrow_black.png");
 			cursor: auto;
 		}
@@ -361,7 +375,7 @@ $margin: 10px;
 	}
 
 	&#right{
-		.nothing-right &, .bios &, .contact &, .darp &{
+		.nothing-right &, .contact &, .intro &{
 			background-image: url("../img/arrow_black.png");
 			cursor: auto;
 		}

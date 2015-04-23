@@ -12,7 +12,7 @@
   <title><?php print $head_title; ?></title>
   <?php print $styles; ?>
   <?php print $scripts; ?>
-  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1, minimal-ui">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimum-scale=1, minimal-ui">
 </head>
 
 <body<?php print $attributes . " " . $scriptNeeded; ?>>

@@ -219,13 +219,27 @@ function onlyDown(){
     }
 
       //bind keys
-      Mousetrap.bind('up', up_);
-      Mousetrap.bind('down', down_);
+      Mousetrap.bind('up', function(e){
+        up_(e);
+        $('body').addClass('no-helper');
+      });
+      Mousetrap.bind('down', function(e){
+        down_(e);
+        $('body').addClass('no-helper');
+      });
       up.once('sfed', function(){$(this).on('click.nav', up_) });
       down.once('sfed',function(){ $(this).on('click.nav', down_) });
     }
+    $('body').addClass('ready');
   });
-
+  Mousetrap.bind('left', function(e){
+    left_(e);
+    $('body').addClass('no-helper');
+  });
+  Mousetrap.bind('right', function(e){
+    right_(e);
+    $('body').addClass('no-helper');
+  });
   //Create listeners and attach them to DOM
   var up = $('<div id="up" class="nav arrow nav-vert">up</div>');
   var down = $('<div id="down" class="nav arrow nav-vert">down</div>');
@@ -259,12 +273,14 @@ function onlyDown(){
   
   superframe = $('.superframe .view-content').cycle(superopts);
   
-
+  $('.text-slide-content').scroll(function(e){
+    e.stopPropagation();
+  });
   //List
   $(document).bind('click', '.pager',function(e){
     var $this = $(e.target).parents("[data-nid]");
     var nid = $(e.target).attr('data-nid') || $this.attr('data-nid');
-    var index = $('.miniframe[data-nid="'+nid+'"]').index();
+    var index = $('.miniframe[data-nid="'+nid+'"]').index() - 1;
     superframe.cycle(index);
   });
 
@@ -280,8 +296,7 @@ function onlyDown(){
   // });
 
   //bind key events (rest is bound on init)
-  Mousetrap.bind('left', left_);
-  Mousetrap.bind('right', right_);
+
 
   //bind arrows
   left.once('sfed', function(){$(this).on('click.nav', left_)});

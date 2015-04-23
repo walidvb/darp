@@ -23,3 +23,5 @@
 <?php foreach ($rows as $id => $row): ?>
 	<?php print $row; ?>
 <?php endforeach; ?>
+
+<img src="/sites/all/themes/clean/img/keyboard.png" class="helper">

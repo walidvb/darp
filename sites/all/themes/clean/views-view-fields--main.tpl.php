@@ -45,7 +45,7 @@ $sortable['status'] = $fields['field_status']->content;
  */
  	$sortable['year'] = substr($fields['field_year']->content,0,4);
  	$sortable['nid'] = $nid;
- 	$sortable['cycle-hash'] = render_($title);
+ 	$sortable['cycle-hash'] = $nid;//render_($title);
  	$data = '';
  	foreach($sortable as $key => $value)
  	{

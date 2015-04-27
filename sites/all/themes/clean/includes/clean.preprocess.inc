@@ -23,7 +23,7 @@ function clean_preprocess_html(&$variables) {
   '#tag' => 'meta', // The #tag is the html tag - <meta />
   '#attributes' => array( // Set up an array of attributes inside the tag
   	'name' => 'viewport',
-    'content' => 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0',
+    'content' => 'width=device-width, initial-scale=1, maximum-scale=1, minimal-ui',
     ),
   );
 
@@ -35,6 +35,7 @@ function clean_preprocess_html(&$variables) {
   {
 	  drupal_add_css(drupal_get_path('theme', 'clean') . '/css/admin.css');
   }
+  $variables['attributes_array']['class'][] = 'no-helper';
   if($path[0] == 'projects')
   {
     drupal_add_js(drupal_get_path('theme', 'clean') . '/js/jquery.cycle2.min.js');
@@ -47,13 +48,8 @@ function clean_preprocess_html(&$variables) {
     drupal_add_css(drupal_get_path('theme', 'clean') . '/css/tipsy.css');
     drupal_add_css(drupal_get_path('theme', 'clean') . '/css/functionnality.css');
     drupal_add_css(drupal_get_path('theme', 'clean') . '/css/projects.css');
-	  drupal_add_js(drupal_get_path('theme', 'clean') . '/js/jquery.tinysort.min.js');
-	  $variables['scriptNeeded'] = true;
-  }
-  else
-  {
-    $variables['attributes_array']['class'][] = 'text-page';
-    $variables['scriptNeeded'] = false;
+    drupal_add_js(drupal_get_path('theme', 'clean') . '/js/jquery.tinysort.min.js');
+    $variables['scriptNeeded'] = true;
   }
   drupal_add_js('jQuery(document).ready(function(){Mousetrap.bind("l o g", function(){window.location = Drupal.settings.basePath + "user"}); if(/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)){jQuery("body").addClass("mobile")}})', 'inline');
   // Switch the doctype to one that works better for RDF if the module is

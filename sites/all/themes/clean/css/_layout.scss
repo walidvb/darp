@@ -49,6 +49,7 @@ body.html{
     
     overflow: visible;
     text-align: right;
+    transition: opacity 0.3s;
     @media #{$mobile}
     {   
         text-align: left;

@@ -58,6 +58,23 @@ jQuery.fn.replaceFirst = function()
 
   Drupal.behaviors.superframe = {
     attach: function (context, settings) {
+        document.ontouchmove = function(e){
+          var scrollable;
+          if($(e.target).hasClass('proj-desc')){
+            scrollable = $(e.target);
+          }
+          else{
+            scrollable = $(e.target).parents('.proj-desc')[0];
+          }
+
+          if(!scrollable){
+            e.preventDefault();
+          }
+          else if(scrollable && $(scrollable).height() < window.innerHeight)
+          {
+            e.preventDefault();
+          }
+        };
 //disable cycle logging
 $.fn.cycle.log = $.noop;
 //move superframe to top level
@@ -97,11 +114,16 @@ right_ = function(e) {
 //bind all events before they fire! :D
 //load further images
 $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, incoming, ff){
-  //cancel whatever had been scheduled
   if($('body').hasClass('menu-open'))
   {
     $('body').removeClass('menu-open')
   }
+
+});
+
+$(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, incoming, ff){
+  //cancel whatever had been scheduled
+  
   //if this is superframe
   if(event.target.className == "view-content")
   {
@@ -121,11 +143,11 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
     var c = currFrame;
     setTimeout(function(){c.cycle(0);}, 500);
   //update current project
-    currFrame = $('.proj-wrapper', incoming);
-    if($('.slide',currFrame).length > 0)
-    {
-      $('body').removeClass('nothing-right');
-    }
+  currFrame = $('.proj-wrapper', incoming);
+  if($('.slide',currFrame).length > 0)
+  {
+    $('body').removeClass('nothing-right');
+  }
     //replace the image
     clearTimeout(superTimeOut);
     clearTimeout(timeOut);
@@ -153,11 +175,12 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
     else if(optionHash.nextSlide == 0)
     {
      $('body').addClass('nothing-up'); 
-    }
-    else{
-     $('body').removeClass('nothing-down'); 
-    }
+   }
+   else{
+    $('body').removeClass('nothing-up'); 
+    $('body').removeClass('nothing-down'); 
   }
+}
   else //if miniframe
   {
     currMiniframe = optionHash.nextSlide;
@@ -195,6 +218,9 @@ function onlyDown(){
   $('body').addClass('nothing-left nothing-right nothing-up');
 }
 
+setTimeout(function(){
+  $('body').removeClass('no-helper');
+}, 1500);
   //initialize cycle
   $(document).bind('cycle-post-initialize', function(event, optionHash){  
     //if this is superframe
@@ -206,15 +232,18 @@ function onlyDown(){
      if(optionHash.currSlide == 0)
      {
       onlyDown();
-     }
-     $('body').addClass('nothing-left');
-     $('.work-list-item').eq(initialSlide).addClass('active-proj');
-     $('body').addClass($(optionHash.slides[optionHash.currSlide]).attr('data-title'));
-     currFrame = $('.proj-wrapper', optionHash.slides[optionHash.currSlide]);
-     currFrame.replaceFirst().find('.img-loading:first, .img-loading:eq(1)').each(function(){$(this).replace()});
+    }
+    else{
 
-     if(optionHash.slideCount - optionHash.nextSlide == 1 && firstInit)
-     {
+    }
+    $('body').addClass('nothing-left');
+    $('.work-list-item').eq(initialSlide).addClass('active-proj');
+    $('body').addClass($(optionHash.slides[optionHash.currSlide]).attr('data-title'));
+    currFrame = $('.proj-wrapper', optionHash.slides[optionHash.currSlide]);
+    currFrame.replaceFirst().find('.img-loading:first, .img-loading:eq(1)').each(function(){$(this).replace()});
+
+    if(optionHash.slideCount - optionHash.nextSlide == 1 && firstInit)
+    {
       firstInit = !firstInit;
     }
 
@@ -232,14 +261,14 @@ function onlyDown(){
     }
     $('body').addClass('ready');
   });
-  Mousetrap.bind('left', function(e){
-    left_(e);
-    $('body').addClass('no-helper');
-  });
-  Mousetrap.bind('right', function(e){
-    right_(e);
-    $('body').addClass('no-helper');
-  });
+Mousetrap.bind('left', function(e){
+  left_(e);
+  $('body').addClass('no-helper');
+});
+Mousetrap.bind('right', function(e){
+  right_(e);
+  $('body').addClass('no-helper');
+});
   //Create listeners and attach them to DOM
   var up = $('<div id="up" class="nav arrow nav-vert">up</div>');
   var down = $('<div id="down" class="nav arrow nav-vert">down</div>');

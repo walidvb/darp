@@ -3,21 +3,20 @@ $slide-padding-mobile: 35px;
 
 .helper{
 	position: fixed;
-  bottom: 10px;
-  right: 10px;
+  bottom: 50px;
+  right: 50px;
   max-width: 150px;
   z-index: 10000;
   opacity: 1;
   transition: all 0.3s ease-in-out;
-  .no-helper &, .intro &, body:not(.ready){
-  	opacity: 0;
+  .no-helper &, body:not(.ready){
+		opacity: 0;
   }
   @media #{$mobile}
   {
-    display: nones;
+    display: none;
   }
 }
-
 #intro .proj-desc{
 	background: url("../img/front.png");
 	color: transparent;
@@ -111,9 +110,6 @@ body.page-projects{
 .proj-wrapper{
 	overflow: hidden;
 	transition: all 0.5s ease-out 0s;
-	-webkit-transition: all 0.5s ease-out 0s;
-	-moz-transition: all 0.5s ease-out 0s;
-	-o-transition: all 0.5s ease-out 0s;
 }
 
 
@@ -122,7 +118,6 @@ body.page-projects{
 	overflow-x: hidden;
 }
 .text-slide-content .proj-short{
-	font-style: italic;
 	.proj-title{
 		text-transform: uppercase;
 	}
@@ -219,7 +214,11 @@ $margin: 10px;
 	top: 0;
 	bottom: 0;
 	z-index: 900;
-	max-height: 100%;
+	max-height: calc(100% - 160px);
+	@media #{$tablet}
+	{
+		max-height: 100%;
+	}
 	max-width: 70%;
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;	
@@ -340,6 +339,7 @@ $margin: 10px;
 
 	&.nav-vert{
 		left:50%;
+		transform: translateX(-10px);
 	}
 	
 	@media #{$mobile}
@@ -370,7 +370,7 @@ $margin: 10px;
 
 	&#down{
 		bottom:3px;
-		transform: rotatez(-180deg);
+		transform: translateX(-18px) rotatez(-180deg) ;
 		.nothing-down &{
 			background-image: url("../img/arrow_black.png");
 			cursor: auto;
@@ -387,7 +387,7 @@ $margin: 10px;
 		{
 			left: $arrow-padding;
 		}
-		transform: rotatez(-90deg)
+		transform: rotatez(-90deg);
 	}
 
 	&#right{

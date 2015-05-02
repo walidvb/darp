@@ -58,7 +58,16 @@ jQuery.fn.replaceFirst = function()
 
   Drupal.behaviors.superframe = {
     attach: function (context, settings) {
-        document.ontouchmove = function(e){
+        $(document).on('touchmove', function(e){
+          e.preventDefault();
+        })
+        $('.proj-desc').on('touchmove', function(e){
+          e.stopPropagation();
+          if($(this).height() <= $(this).parents('.text-slide-content').height())
+          {
+            e.preventDefault();
+          }
+          return;
           var scrollable;
           if($(e.target).hasClass('proj-desc')){
             scrollable = $(e.target);
@@ -70,11 +79,11 @@ jQuery.fn.replaceFirst = function()
           if(!scrollable){
             e.preventDefault();
           }
-          else if(scrollable && $(scrollable).height() < window.innerHeight)
+          else if(scrollable && $(scrollable).height() < $(scrollable).parents('.text-slide-content').height())
           {
-            e.preventDefault();
+            e.stopPropagation();
           }
-        };
+        });
 //disable cycle logging
 $.fn.cycle.log = $.noop;
 //move superframe to top level

@@ -135,7 +135,7 @@ body.page-projects{
 		$padding-vert: 40px;
 		width: calc(100% - #{2 * $padding});
 		height: calc(100% - #{2 * $padding-vert});
-		transform: translateY($padding-vert);
+
 	@media #{$tablet}
 	{
 		$padding: $slide-padding;
@@ -318,7 +318,7 @@ $margin: 10px;
 		background-image: url("../img/arrow.png");
 		background-repeat: no-repeat;
 		background-size: contain;	
-		&:hover{
+		body:not(.mobile) &:hover{
 			background-image: url("../img/arrow_black.png");
 		}
 	}

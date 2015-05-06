@@ -11,8 +11,9 @@
 			<div class="proj-description text-slide slide">
 				<div class="text-slide-content">
 					<div class="proj-desc">
-						<div class="proj-desc-body">
+						<div class="proj-desc-body card">
 							<h1>DARP</h1>
+							<img src="/sites/all/themes/clean/img/front.png" alt="">
 						</div>
 					</div>
 				</div>

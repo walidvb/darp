@@ -77,8 +77,9 @@ $sortable['status'] = $fields['field_status']->content;
  				<div class="proj-description text-slide slide">
  					<div class="text-slide-content">
  						<div class="proj-desc">
- 							<div class="proj-desc-body">
- 							<h1>Pellacani Romanens architectes</h1>
+ 							<div class="proj-desc-body card">
+								<img  src="/sites/all/themes/clean/img/back.png" alt="">
+								<h1>Pellacani Romanens architectes</h1>
  							</div>
  						</div>
  					</div>

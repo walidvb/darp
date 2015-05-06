@@ -17,68 +17,71 @@ $slide-padding-mobile: 35px;
     display: none;
   }
 }
-#intro .proj-desc{
-	background: url("../img/front.png");
+#intro .proj-desc, #darp .proj-description:first-child .proj-desc{
 	color: transparent;
 }
-#darp .proj-description:first-child .proj-desc{
-	background: url("../img/back.png");
-	color: transparent;
+
+.card{
+	margin: auto;
 }
-#contact .proj-desc{
-	background: url("../img/darp_background.png");
-}
-#contact, #intro, #darp .proj-description:first-child{
-	.proj-desc{
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 50%;
-		-webkit-transform: translateY(-50%);
-		min-width: 80%;
-		max-width: 80%;
-		min-height: 100px;
-		@media #{$tablet}
-		{
-			min-width: 450px;
-			max-width: 450px;
-			min-height: 250px;
-		}
-		margin: auto;
-		background-position: center;
+// #contact, #intro, #darp .prosj-description:first-child{
+// 	.proj-desc{
+// 		position: absolute;
+// 		left: 0;
+// 		right: 0;
+// 		top: 50%;
+// 		-webkit-transform: translateY(-50%);
+// 		min-width: 80%;
+// 		max-width: 80%;
+// 		min-height: 100px;
+// 		@media #{$tablet}
+// 		{
+// 			min-width: 450px;
+// 			max-width: 450px;
+// 			min-height: 250px;
+// 		}
+// 		margin: auto;
+// 		background-position: center;
+// 		background-size: cover;
+// 		display: table;
+// 		padding: 15px;
+// 		.proj-desc-body{
+// 			display: table-cell;
+// 			p{
+// 				margin-bottom: 0;
+// 			}
+// 			a{
+// 				color: black;
+// 				&:hover{
+// 					text-transform: underline;
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+
+// #intro{
+// 	h1{
+// 		font-weight: normal;
+// 		margin-bottom: 0;
+// 	}
+// 	.proj-desc-body{
+// 		text-align: center;
+// 		vertical-align: middle;
+// 	}
+// }
+#contact{
+	.proj-desc-body{
+		padding: 220px 230px 10px 40px;
 		background-size: cover;
-		display: table;
-		padding: 15px;
-		.proj-desc-body{
-			display: table-cell;
-			p{
-				margin-bottom: 0;
-			}
-			a{
+		background-image: url('../img/darp_background.png');
+		@extend .card;
+		a{
 				color: black;
 				&:hover{
 					text-transform: underline;
 				}
 			}
-		}
-	}
-}
-
-#intro{
-	h1{
-		font-weight: normal;
-		margin-bottom: 0;
-	}
-	.proj-desc-body{
-		text-align: center;
-		vertical-align: middle;
-	}
-}
-#contact{
-	.proj-desc-body{
-		font-size: 14px;
-		display: table-cell;
-		vertical-align: bottom;
 	}
 }
 

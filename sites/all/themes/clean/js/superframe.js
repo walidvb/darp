@@ -108,7 +108,7 @@ down_ = function(e) {
 }
 //previous frame
 left_ = function(e) {
-  if($(currFrame).parents('[data-nid="119"]').length > 0)
+  if($(currFrame).parents('[data-nid="119"]').length > 0 && e.keyCode == 37)
   {
     return;
   }
@@ -217,7 +217,7 @@ $(document).bind('cycle-before', function(event, optionHash, outgoingSlideEl, in
     }
 
     //fade arrows
-    if(optionHash.nextSlide == 0 || $(currFrame).parents('[data-nid="119"]').length < 0){
+    if(optionHash.nextSlide == 0 || $(currFrame).parents('[data-nid="119"]').length > 0){
       $('body').addClass('nothing-left');
     }
     else if(optionHash.nextSlide == optionHash.slideCount - 1)
@@ -278,7 +278,7 @@ setTimeout(function(){
     }
     $('body').addClass('ready');
   });
-Mousetrap.bind('left', function(e){
+Mousetrap.bind(['left', 'i'], function(e){
   left_(e);
   $('body').addClass('no-helper');
 });

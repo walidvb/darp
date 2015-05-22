@@ -5,12 +5,22 @@ $slide-padding-mobile: 35px;
 	position: fixed;
   bottom: 50px;
   right: 50px;
-  max-width: 150px;
   z-index: 10000;
   opacity: 1;
   transition: all 0.3s ease-in-out;
+  img{
+  	max-width: 182px;
+  }
+  &:after{
+  	content: "use keyboard to navigate";
+  	text-transform: uppercase;
+  	font-size: 0.8em;
+  	display: block;
+  	text-align: center;
+  }
   .no-helper &, body:not(.ready){
 		opacity: 0;
+		bottom: -100px;
   }
   @media #{$mobile}
   {

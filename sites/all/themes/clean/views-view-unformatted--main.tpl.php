@@ -25,4 +25,6 @@
 	<?php print $row; ?>
 <?php endforeach; ?>
 
-<img src="/sites/all/themes/clean/img/keyboard.png" class="helper">
+<div class="helper">
+	<img src="/sites/all/themes/clean/img/keyboard.png">
+</div>

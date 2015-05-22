@@ -304,6 +304,14 @@ Mousetrap.bind('right', function(e){
     allowWrap: false,
   }
   var miniWrappers = $('.proj-wrapper');
+  var regardSlides = $('.proj-wrapper#regards .slide');
+  var regardsIntro = regardSlides[0];
+  function Shuffle(o) {
+    for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+  };
+  Shuffle(regardSlides);
+  $('.proj-wrapper#regards').append(regardSlides).prepend(regardsIntro);
   miniWrappers.each(function(index) {
     if(index == miniWrappers.length - 1)
     {
